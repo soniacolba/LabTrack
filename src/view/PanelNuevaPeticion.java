@@ -5,8 +5,29 @@
  */
 package view;
 
+
+import dao.PeticionDAO;
+import dao.PeticionPruebaDAO;
+import dao.PruebaDAO;
+import dao.TipoMuestraDAO;
+import db.DB;
 import java.awt.CardLayout;
+import java.awt.Color;
+import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import model.EnumEstadoPeticion;
+import model.EnumEstadoPeticionPrueba;
+import model.EnumPrioridad;
+import model.Paciente;
+import model.Peticion;
+import model.PeticionPrueba;
+import model.Prueba;
+import model.TipoMuestra;
+
 
 /**
  *
@@ -15,10 +36,136 @@ import javax.swing.JPanel;
 public class PanelNuevaPeticion extends javax.swing.JPanel {
 
     private JPanel panelPrincipal;
+    private Paciente pacienteCreado;
+
+    private DefaultListModel<Prueba> modeloDisponibles = new DefaultListModel<>();
+    private DefaultListModel<Prueba> modeloAnadidas = new DefaultListModel<>();
+    
+    private List<Prueba> listadoPruebas = new ArrayList<>();
+    
+    private int indiceTipoMuestra = 0;
+    private boolean limpiar = false;
+
+    public Paciente getPacienteCreado() {
+        return pacienteCreado;
+    }
 
     public PanelNuevaPeticion(JPanel panelPrincipal) {
         this.panelPrincipal = panelPrincipal;
         initComponents();
+        cargarTiposMuestra();
+        lstPruebasDisponibles.setModel(modeloDisponibles);
+        lstPruebasAnadidas.setModel(modeloAnadidas);
+        habilitarDetallesPeticion(false);
+        cargarPruebasDisponibles();
+
+    }
+
+    private void cargarTiposMuestra() {
+
+        TipoMuestraDAO dao = new TipoMuestraDAO();
+        List<TipoMuestra> lista = dao.listarTodos();
+
+        comboTipoMuestra.removeAllItems();
+        comboTipoMuestra.addItem(new TipoMuestra(0, "--Selecciona tipo de muestra--"));
+
+        for (TipoMuestra t : lista) {
+            comboTipoMuestra.addItem(t);
+        }
+    }
+
+    private void cargarPruebasDisponibles() {
+        modeloDisponibles.clear();
+        modeloAnadidas.clear();
+
+        TipoMuestra tipo = (TipoMuestra) comboTipoMuestra.getSelectedItem();
+
+        if (tipo == null || tipo.getId() == 0) {
+            return;
+        }
+
+        PruebaDAO dao = new PruebaDAO();
+        List<Prueba> lista = dao.listarPorTipoMuestra(tipo.getId());
+        
+        listadoPruebas = new ArrayList<>(lista);
+
+        for (Prueba p : lista) {
+            modeloDisponibles.addElement(p);
+        }
+    }
+    
+    private void cargarListadoPruebas(List<Prueba> lista){
+        listadoPruebas = lista;
+        modeloDisponibles.clear();
+        
+        for (Prueba p : lista) {
+            modeloDisponibles.addElement(p);
+        }
+    }
+
+    private void habilitarDetallesPeticion(boolean habilitar) {
+        comboTipoMuestra.setEnabled(habilitar);
+        rBPrioridadNormal.setEnabled(habilitar);
+        rBPrioridadUrgente.setEnabled(habilitar);
+        txtBuscarPrueba.setEnabled(habilitar);
+        lstPruebasDisponibles.setEnabled(habilitar);
+        lstPruebasAnadidas.setEnabled(habilitar);
+        btnAgregar.setEnabled(habilitar);
+        btnQuitar.setEnabled(habilitar);
+        btnCrear.setEnabled(habilitar);
+    }
+
+    private void filtrarPruebas() {
+
+        String texto = txtBuscarPrueba.getText().toLowerCase().trim();
+
+        if (texto.equals("buscar prueba...")) {
+            texto = "";
+        }
+        modeloDisponibles.clear();
+
+        for (Prueba p : listadoPruebas) {
+            if (!modeloAnadidas.contains(p) && p.getNombre().toLowerCase().contains(texto)) {
+                modeloDisponibles.addElement(p);
+            }
+        }
+    }
+
+    private void limpiarFormulario() {
+        
+        limpiar = true;
+        
+        txtCip.setText("");
+        txtNombre.setText("");
+        txtApellidos.setText("");
+        txtFechaNacimiento.setText("");
+
+        comboTipoMuestra.setSelectedIndex(0);
+        rBPrioridadNormal.setSelected(true);
+
+        txtBuscarPrueba.setText("Buscar prueba...");
+        txtBuscarPrueba.setForeground(Color.GRAY);
+
+        modeloDisponibles.clear();
+        modeloAnadidas.clear();
+        listadoPruebas.clear();
+
+        indiceTipoMuestra = 0;
+        
+        habilitarDetallesPeticion(false);
+        
+        limpiar = false;
+    }
+    
+    public void ordenAlfabeticoListas(DefaultListModel<Prueba> modelo, Prueba prueba){
+        String nombrePrueba = prueba.getNombre().toLowerCase();
+        
+        int i = 0;
+        while (i < modelo.size() && modelo.getElementAt(i).getNombre().toLowerCase().compareTo(nombrePrueba)<0){
+            i++;
+        }
+        
+        modelo.add(i, prueba);
     }
 
     /**
@@ -30,40 +177,734 @@ public class PanelNuevaPeticion extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
+        buttonGroupPrioridad = new javax.swing.ButtonGroup();
+        panelSuperior = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        panelCentral = new javax.swing.JPanel();
+        panelDatosPaciente = new javax.swing.JPanel();
+        datosPaciente = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        panelBtnBuscar = new javax.swing.JPanel();
+        btnBuscar = new javax.swing.JLabel();
+        formularioPaciente = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        txtApellidos = new javax.swing.JTextField();
+        txtNombre = new javax.swing.JTextField();
+        txtFechaNacimiento = new javax.swing.JTextField();
+        txtCip = new javax.swing.JTextField();
+        panelBtnAlta = new javax.swing.JPanel();
+        btnAltaPaciente = new javax.swing.JLabel();
+        txtApellidos1 = new javax.swing.JTextField();
+        panelDatosPeticion = new javax.swing.JPanel();
+        detallesPeticion = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        formularioPeticion = new javax.swing.JPanel();
+        jLabel11 = new javax.swing.JLabel();
+        comboTipoMuestra = new javax.swing.JComboBox<>();
+        jLabel12 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        lstPruebasDisponibles = new javax.swing.JList<>();
+        txtBuscarPrueba = new javax.swing.JTextField();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        lstPruebasAnadidas = new javax.swing.JList<>();
+        jLabel13 = new javax.swing.JLabel();
+        rBPrioridadNormal = new javax.swing.JRadioButton();
+        rBPrioridadUrgente = new javax.swing.JRadioButton();
+        jLabel14 = new javax.swing.JLabel();
+        panelBtnAgregar = new javax.swing.JPanel();
+        btnAgregar = new javax.swing.JLabel();
+        panelBtnQuitar = new javax.swing.JPanel();
+        btnQuitar = new javax.swing.JLabel();
+        jSeparator2 = new javax.swing.JSeparator();
+        panelInferior = new javax.swing.JPanel();
+        panelBtnCancelar = new javax.swing.JPanel();
+        btnCancelar = new javax.swing.JLabel();
+        panelBtnCrear = new javax.swing.JPanel();
+        btnCrear = new javax.swing.JLabel();
 
-        jButton1.setText("Cancelar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+        setBackground(new java.awt.Color(255, 255, 255));
+        setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        setLayout(new java.awt.BorderLayout());
+
+        panelSuperior.setLayout(new java.awt.BorderLayout());
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel1.setText("Registrar Nueva Petición");
+        jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        panelSuperior.add(jLabel1, java.awt.BorderLayout.CENTER);
+
+        add(panelSuperior, java.awt.BorderLayout.PAGE_START);
+
+        panelCentral.setBackground(new java.awt.Color(255, 255, 255));
+        panelCentral.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 1, 1, 1));
+        panelCentral.setLayout(new javax.swing.BoxLayout(panelCentral, javax.swing.BoxLayout.Y_AXIS));
+
+        panelDatosPaciente.setBackground(new java.awt.Color(243, 245, 249));
+        panelDatosPaciente.setMaximumSize(new java.awt.Dimension(2147483647, 280));
+        panelDatosPaciente.setMinimumSize(new java.awt.Dimension(1006, 250));
+        panelDatosPaciente.setName(""); // NOI18N
+        panelDatosPaciente.setPreferredSize(new java.awt.Dimension(956, 250));
+        panelDatosPaciente.setLayout(new java.awt.BorderLayout());
+
+        datosPaciente.setBackground(new java.awt.Color(215, 232, 247));
+        datosPaciente.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        datosPaciente.setMinimumSize(new java.awt.Dimension(124, 70));
+        datosPaciente.setLayout(new java.awt.BorderLayout());
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        jLabel2.setText("Datos del paciente");
+        datosPaciente.add(jLabel2, java.awt.BorderLayout.WEST);
+
+        jPanel6.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        jPanel6.setOpaque(false);
+        jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        panelBtnBuscar.setBackground(new java.awt.Color(75, 113, 167));
+
+        btnBuscar.setBackground(new java.awt.Color(255, 255, 255));
+        btnBuscar.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        btnBuscar.setForeground(new java.awt.Color(255, 255, 255));
+        btnBuscar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lupab.png"))); // NOI18N
+        btnBuscar.setText("Buscar");
+        btnBuscar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnBuscarMouseClicked(evt);
             }
         });
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(146, 146, 146)
-                .addComponent(jButton1)
-                .addContainerGap(179, Short.MAX_VALUE))
+        javax.swing.GroupLayout panelBtnBuscarLayout = new javax.swing.GroupLayout(panelBtnBuscar);
+        panelBtnBuscar.setLayout(panelBtnBuscarLayout);
+        panelBtnBuscarLayout.setHorizontalGroup(
+            panelBtnBuscarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(btnBuscar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(124, 124, 124)
-                .addComponent(jButton1)
-                .addContainerGap(153, Short.MAX_VALUE))
+        panelBtnBuscarLayout.setVerticalGroup(
+            panelBtnBuscarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(btnBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
         );
+
+        jPanel6.add(panelBtnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 0, -1, -1));
+
+        datosPaciente.add(jPanel6, java.awt.BorderLayout.LINE_END);
+
+        panelDatosPaciente.add(datosPaciente, java.awt.BorderLayout.NORTH);
+
+        formularioPaciente.setMaximumSize(new java.awt.Dimension(956, 160));
+        formularioPaciente.setMinimumSize(new java.awt.Dimension(956, 160));
+        formularioPaciente.setOpaque(false);
+        formularioPaciente.setPreferredSize(new java.awt.Dimension(956, 160));
+        formularioPaciente.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jLabel3.setText("CIP");
+        formularioPaciente.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, -1, -1));
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jLabel4.setText("Nombre");
+        formularioPaciente.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(364, 31, -1, -1));
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jLabel5.setText("Fecha de nacimiento");
+        formularioPaciente.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(718, 31, -1, -1));
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jLabel6.setText("Apellidos");
+        formularioPaciente.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 31, -1, -1));
+
+        txtApellidos.setEditable(false);
+        txtApellidos.setBackground(new java.awt.Color(255, 255, 255));
+        formularioPaciente.add(txtApellidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 336, 29));
+
+        txtNombre.setEditable(false);
+        txtNombre.setBackground(new java.awt.Color(255, 255, 255));
+        formularioPaciente.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(364, 59, 336, 29));
+
+        txtFechaNacimiento.setEditable(false);
+        txtFechaNacimiento.setBackground(new java.awt.Color(255, 255, 255));
+        formularioPaciente.add(txtFechaNacimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(718, 59, 237, 29));
+
+        txtCip.setEditable(false);
+        txtCip.setBackground(new java.awt.Color(255, 255, 255));
+        formularioPaciente.add(txtCip, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 336, 29));
+
+        panelBtnAlta.setBackground(new java.awt.Color(137, 188, 232));
+
+        btnAltaPaciente.setBackground(new java.awt.Color(255, 255, 255));
+        btnAltaPaciente.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        btnAltaPaciente.setForeground(new java.awt.Color(255, 255, 255));
+        btnAltaPaciente.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnAltaPaciente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lupab.png"))); // NOI18N
+        btnAltaPaciente.setText("Dar de alta nuevo paciente");
+        btnAltaPaciente.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnAltaPacienteMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelBtnAltaLayout = new javax.swing.GroupLayout(panelBtnAlta);
+        panelBtnAlta.setLayout(panelBtnAltaLayout);
+        panelBtnAltaLayout.setHorizontalGroup(
+            panelBtnAltaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(btnAltaPaciente, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
+        );
+        panelBtnAltaLayout.setVerticalGroup(
+            panelBtnAltaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBtnAltaLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnAltaPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        formularioPaciente.add(panelBtnAlta, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 130, 240, 30));
+
+        txtApellidos1.setEditable(false);
+        txtApellidos1.setBackground(new java.awt.Color(255, 255, 255));
+        formularioPaciente.add(txtApellidos1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 336, 29));
+
+        panelDatosPaciente.add(formularioPaciente, java.awt.BorderLayout.LINE_START);
+
+        panelCentral.add(panelDatosPaciente);
+
+        panelDatosPeticion.setBackground(new java.awt.Color(243, 245, 249));
+        panelDatosPeticion.setLayout(new java.awt.BorderLayout());
+
+        detallesPeticion.setBackground(new java.awt.Color(215, 232, 247));
+        detallesPeticion.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        detallesPeticion.setMinimumSize(new java.awt.Dimension(124, 70));
+        detallesPeticion.setPreferredSize(new java.awt.Dimension(381, 51));
+        detallesPeticion.setLayout(new java.awt.BorderLayout());
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        jLabel7.setText("Detalles de la petición");
+        detallesPeticion.add(jLabel7, java.awt.BorderLayout.WEST);
+
+        panelDatosPeticion.add(detallesPeticion, java.awt.BorderLayout.NORTH);
+
+        formularioPeticion.setMaximumSize(new java.awt.Dimension(2147483647, 180));
+        formularioPeticion.setMinimumSize(new java.awt.Dimension(1006, 400));
+        formularioPeticion.setName(""); // NOI18N
+        formularioPeticion.setOpaque(false);
+        formularioPeticion.setPreferredSize(new java.awt.Dimension(1006, 230));
+        formularioPeticion.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jLabel11.setText("Pruebas añadidas:");
+        formularioPeticion.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 110, -1, -1));
+
+        comboTipoMuestra.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        comboTipoMuestra.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboTipoMuestraActionPerformed(evt);
+            }
+        });
+        formularioPeticion.add(comboTipoMuestra, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 410, 30));
+
+        jLabel12.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jLabel12.setText("Prioridad:");
+        formularioPeticion.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 20, -1, -1));
+
+        lstPruebasDisponibles.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        lstPruebasDisponibles.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lstPruebasDisponiblesMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(lstPruebasDisponibles);
+
+        formularioPeticion.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 460, 200));
+
+        txtBuscarPrueba.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        txtBuscarPrueba.setForeground(new java.awt.Color(204, 204, 204));
+        txtBuscarPrueba.setText("Buscar prueba...");
+        txtBuscarPrueba.setToolTipText("");
+        txtBuscarPrueba.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtBuscarPruebaFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtBuscarPruebaFocusLost(evt);
+            }
+        });
+        txtBuscarPrueba.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBuscarPruebaKeyReleased(evt);
+            }
+        });
+        formularioPeticion.add(txtBuscarPrueba, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 460, 30));
+
+        lstPruebasAnadidas.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        lstPruebasAnadidas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lstPruebasAnadidasMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(lstPruebasAnadidas);
+
+        formularioPeticion.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 140, 420, 220));
+
+        jLabel13.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jLabel13.setText("Tipo de muestra:");
+        formularioPeticion.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
+
+        buttonGroupPrioridad.add(rBPrioridadNormal);
+        rBPrioridadNormal.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        rBPrioridadNormal.setSelected(true);
+        rBPrioridadNormal.setText("Normal");
+        rBPrioridadNormal.setOpaque(false);
+        formularioPeticion.add(rBPrioridadNormal, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 50, -1, -1));
+
+        buttonGroupPrioridad.add(rBPrioridadUrgente);
+        rBPrioridadUrgente.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        rBPrioridadUrgente.setText("Urgente");
+        rBPrioridadUrgente.setOpaque(false);
+        rBPrioridadUrgente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rBPrioridadUrgenteActionPerformed(evt);
+            }
+        });
+        formularioPeticion.add(rBPrioridadUrgente, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 50, -1, -1));
+
+        jLabel14.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jLabel14.setText("Pruebas disponibles:");
+        formularioPeticion.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, -1, -1));
+
+        panelBtnAgregar.setBackground(new java.awt.Color(255, 255, 255));
+        panelBtnAgregar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
+        panelBtnAgregar.setName(""); // NOI18N
+
+        btnAgregar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnAgregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/arrow_right.png"))); // NOI18N
+        btnAgregar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnAgregarMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelBtnAgregarLayout = new javax.swing.GroupLayout(panelBtnAgregar);
+        panelBtnAgregar.setLayout(panelBtnAgregarLayout);
+        panelBtnAgregarLayout.setHorizontalGroup(
+            panelBtnAgregarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBtnAgregarLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        panelBtnAgregarLayout.setVerticalGroup(
+            panelBtnAgregarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBtnAgregarLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        formularioPeticion.add(panelBtnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 210, -1, -1));
+
+        panelBtnQuitar.setBackground(new java.awt.Color(255, 255, 255));
+        panelBtnQuitar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
+        panelBtnQuitar.setName(""); // NOI18N
+
+        btnQuitar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnQuitar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/arrow_left.png"))); // NOI18N
+        btnQuitar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnQuitarMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelBtnQuitarLayout = new javax.swing.GroupLayout(panelBtnQuitar);
+        panelBtnQuitar.setLayout(panelBtnQuitarLayout);
+        panelBtnQuitarLayout.setHorizontalGroup(
+            panelBtnQuitarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBtnQuitarLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnQuitar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        panelBtnQuitarLayout.setVerticalGroup(
+            panelBtnQuitarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBtnQuitarLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnQuitar))
+        );
+
+        formularioPeticion.add(panelBtnQuitar, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 250, -1, -1));
+
+        jSeparator2.setForeground(new java.awt.Color(204, 204, 204));
+        jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        formularioPeticion.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 100, -1, 260));
+
+        panelDatosPeticion.add(formularioPeticion, java.awt.BorderLayout.LINE_START);
+
+        panelCentral.add(panelDatosPeticion);
+
+        add(panelCentral, java.awt.BorderLayout.CENTER);
+
+        panelInferior.setBackground(new java.awt.Color(255, 255, 255));
+        panelInferior.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 20));
+        panelInferior.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
+
+        panelBtnCancelar.setBackground(new java.awt.Color(243, 245, 249));
+
+        btnCancelar.setBackground(new java.awt.Color(255, 255, 255));
+        btnCancelar.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        btnCancelar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCancelarMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelBtnCancelarLayout = new javax.swing.GroupLayout(panelBtnCancelar);
+        panelBtnCancelar.setLayout(panelBtnCancelarLayout);
+        panelBtnCancelarLayout.setHorizontalGroup(
+            panelBtnCancelarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBtnCancelarLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        panelBtnCancelarLayout.setVerticalGroup(
+            panelBtnCancelarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBtnCancelarLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        panelInferior.add(panelBtnCancelar);
+
+        panelBtnCrear.setBackground(new java.awt.Color(75, 113, 167));
+
+        btnCrear.setBackground(new java.awt.Color(255, 255, 255));
+        btnCrear.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        btnCrear.setForeground(new java.awt.Color(255, 255, 255));
+        btnCrear.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnCrear.setText("Crear petición");
+        btnCrear.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCrearMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelBtnCrearLayout = new javax.swing.GroupLayout(panelBtnCrear);
+        panelBtnCrear.setLayout(panelBtnCrearLayout);
+        panelBtnCrearLayout.setHorizontalGroup(
+            panelBtnCrearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBtnCrearLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnCrear, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        panelBtnCrearLayout.setVerticalGroup(
+            panelBtnCrearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBtnCrearLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnCrear, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        panelInferior.add(panelBtnCrear);
+
+        add(panelInferior, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        ((CardLayout) panelPrincipal.getLayout())
-        .show(panelPrincipal, "Pantalla Inicio");
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void btnBuscarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBuscarMouseClicked
+        DialogoBuscarPaciente dialog = new DialogoBuscarPaciente(null, true);
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+
+        Paciente p = dialog.getPacienteSeleccionado();
+
+        if (p != null) {
+            txtNombre.setText(p.getNombre());
+            txtApellidos.setText(p.getApellidos());
+            txtFechaNacimiento.setText(p.getFechaNacimiento().toString());
+            txtCip.setText(p.getCip().toString());
+
+        }
+
+        habilitarDetallesPeticion(true);
+
+    }//GEN-LAST:event_btnBuscarMouseClicked
+
+    private void btnCrearMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCrearMouseClicked
+        if (txtCip.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debes seleccionar un paciente.");
+            return;
+        }
+
+        TipoMuestra tipoMuestra = (TipoMuestra) comboTipoMuestra.getSelectedItem();
+        if (tipoMuestra == null || tipoMuestra.getId() == 0) {
+            JOptionPane.showMessageDialog(this, "Debes seleccionar un tipo de muestra.");
+            return;
+        }
+
+        if (modeloAnadidas.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debes añadir al menos una prueba.");
+            return;
+        }
+
+        EnumPrioridad prioridad;
+        if (rBPrioridadUrgente.isSelected()) {
+            prioridad = EnumPrioridad.URGENTE;
+        } else {
+            prioridad = EnumPrioridad.NORMAL;
+        }
+
+        Peticion peticion = new Peticion(
+                0,
+                java.time.LocalDateTime.now(),
+                prioridad,
+                EnumEstadoPeticion.PENDIENTE,
+                txtCip.getText().trim(),
+                1,
+                tipoMuestra.getId()
+        );
+
+        Connection con = null;
+
+        try {
+            con = DB.getConnection();
+            con.setAutoCommit(false);
+
+            PeticionDAO peticionDAO = new PeticionDAO();
+            PeticionPruebaDAO peticionPruebaDAO = new PeticionPruebaDAO();
+
+            int idPeticion = peticionDAO.insertar(con, peticion);
+
+            if (idPeticion == -1) {
+                throw new Exception("No se pudo insertar la petición.");
+            }
+
+            for (int i = 0; i < modeloAnadidas.size(); i++) {
+                Prueba prueba = modeloAnadidas.getElementAt(i);
+
+                PeticionPrueba peticionPrueba = new PeticionPrueba(
+                        0,
+                        EnumEstadoPeticionPrueba.PENDIENTE,
+                        null,
+                        idPeticion,
+                        prueba.getId()
+                );
+
+                boolean insertada = peticionPruebaDAO.insertar(con, peticionPrueba);
+
+                if (!insertada) {
+                    throw new Exception("No se pudo insertar una prueba de la petición.");
+                }
+            }
+
+            con.commit();
+
+            JOptionPane.showMessageDialog(this, "Petición creada correctamente.");
+
+            limpiarFormulario();
+
+            CardLayout cl = (CardLayout) panelPrincipal.getLayout();
+            cl.show(panelPrincipal, "Pantalla Inicio");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            if (con != null) {
+                try {
+                    con.rollback();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            JOptionPane.showMessageDialog(this, "Error al crear la petición.");
+
+        } finally {
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }//GEN-LAST:event_btnCrearMouseClicked
+
+    private void btnCancelarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCancelarMouseClicked
+        boolean hayDatos = !txtCip.getText().trim().isEmpty()
+                || !txtNombre.getText().trim().isEmpty()
+                || !txtApellidos.getText().trim().isEmpty()
+                || !txtFechaNacimiento.getText().trim().isEmpty()
+                || comboTipoMuestra.getSelectedIndex() > 0
+                || !modeloAnadidas.isEmpty();
+
+        if (hayDatos) {
+            int opcion = JOptionPane.showConfirmDialog(
+                    this,
+                    "Se perderán los datos introducidos. ¿Deseas cancelar?",
+                    "Confirmar cancelación",
+                    JOptionPane.YES_NO_OPTION
+            );
+
+            if (opcion != JOptionPane.YES_OPTION) {
+                return;
+            }
+        }
+        
+        limpiarFormulario();
+        
+
+        CardLayout cl = (CardLayout) panelPrincipal.getLayout();
+        cl.show(panelPrincipal, "Pantalla Inicio");
+    }//GEN-LAST:event_btnCancelarMouseClicked
+
+    private void btnAltaPacienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAltaPacienteMouseClicked
+        DialogoAltaPaciente dialog = new DialogoAltaPaciente(null, true);
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+
+        Paciente p = dialog.getPacienteCreado();
+
+        if (p != null) {
+            txtCip.setText(p.getCip());
+            txtNombre.setText(p.getNombre());
+            txtApellidos.setText(p.getApellidos());
+            txtFechaNacimiento.setText(p.getFechaNacimiento().toString());
+        }
+        habilitarDetallesPeticion(true);
+    }//GEN-LAST:event_btnAltaPacienteMouseClicked
+
+    private void rBPrioridadUrgenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rBPrioridadUrgenteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_rBPrioridadUrgenteActionPerformed
+
+    private void comboTipoMuestraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboTipoMuestraActionPerformed
+        
+        if (limpiar) {
+            return;
+        }
+        
+        if (!modeloAnadidas.isEmpty()) {
+
+            int opcion = JOptionPane.showConfirmDialog(
+                    this,
+                    "Se eliminarán las pruebas añadidas. ¿Deseas continuar?",
+                    "Cambiar tipo de muestra",
+                    JOptionPane.YES_NO_OPTION
+            );
+
+            if (opcion == JOptionPane.NO_OPTION) {
+                comboTipoMuestra.setSelectedIndex(indiceTipoMuestra);
+                return;
+            }
+        }
+
+        indiceTipoMuestra = comboTipoMuestra.getSelectedIndex();
+        cargarPruebasDisponibles();
+    }//GEN-LAST:event_comboTipoMuestraActionPerformed
+
+    private void txtBuscarPruebaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBuscarPruebaFocusGained
+        if (txtBuscarPrueba.getText().equals("Buscar prueba...")) {
+            txtBuscarPrueba.setText("");
+            txtBuscarPrueba.setForeground(Color.black);
+        }
+    }//GEN-LAST:event_txtBuscarPruebaFocusGained
+
+    private void txtBuscarPruebaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBuscarPruebaFocusLost
+        if (txtBuscarPrueba.getText().trim().isEmpty()) {
+            txtBuscarPrueba.setText("Buscar prueba...");
+            txtBuscarPrueba.setForeground(Color.GRAY);
+        }
+    }//GEN-LAST:event_txtBuscarPruebaFocusLost
+
+    private void btnAgregarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarMouseClicked
+        Prueba pruebaSeleccionada = lstPruebasDisponibles.getSelectedValue();
+        
+        if (pruebaSeleccionada != null) {
+            modeloDisponibles.removeElement(pruebaSeleccionada);
+            ordenAlfabeticoListas(modeloAnadidas, pruebaSeleccionada);
+        }
+    }//GEN-LAST:event_btnAgregarMouseClicked
+
+    private void btnQuitarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnQuitarMouseClicked
+        Prueba pruebaSeleccionada = lstPruebasAnadidas.getSelectedValue();
+
+        if (pruebaSeleccionada != null) {
+            modeloAnadidas.removeElement(pruebaSeleccionada);
+            ordenAlfabeticoListas(modeloDisponibles, pruebaSeleccionada);
+        }
+    }//GEN-LAST:event_btnQuitarMouseClicked
+
+    private void lstPruebasDisponiblesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstPruebasDisponiblesMouseClicked
+        if (evt.getClickCount() == 2) {
+            Prueba pruebaSeleccionada = lstPruebasDisponibles.getSelectedValue();
+
+            if (pruebaSeleccionada != null) {
+                modeloDisponibles.removeElement(pruebaSeleccionada);
+                ordenAlfabeticoListas(modeloAnadidas, pruebaSeleccionada);
+            }
+        }
+    }//GEN-LAST:event_lstPruebasDisponiblesMouseClicked
+
+    private void lstPruebasAnadidasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstPruebasAnadidasMouseClicked
+        if (evt.getClickCount() == 2) {
+            Prueba pruebaSeleccionada = lstPruebasAnadidas.getSelectedValue();
+
+            if (pruebaSeleccionada != null) {
+                modeloAnadidas.removeElement(pruebaSeleccionada);
+                ordenAlfabeticoListas(modeloDisponibles, pruebaSeleccionada);
+            }
+        }
+    }//GEN-LAST:event_lstPruebasAnadidasMouseClicked
+
+    private void txtBuscarPruebaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarPruebaKeyReleased
+        filtrarPruebas();
+    }//GEN-LAST:event_txtBuscarPruebaKeyReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel btnAgregar;
+    private javax.swing.JLabel btnAltaPaciente;
+    private javax.swing.JLabel btnBuscar;
+    private javax.swing.JLabel btnCancelar;
+    private javax.swing.JLabel btnCrear;
+    private javax.swing.JLabel btnQuitar;
+    private javax.swing.ButtonGroup buttonGroupPrioridad;
+    private javax.swing.JComboBox<TipoMuestra> comboTipoMuestra;
+    private javax.swing.JPanel datosPaciente;
+    private javax.swing.JPanel detallesPeticion;
+    private javax.swing.JPanel formularioPaciente;
+    private javax.swing.JPanel formularioPeticion;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JList<Prueba> lstPruebasAnadidas;
+    private javax.swing.JList<Prueba> lstPruebasDisponibles;
+    private javax.swing.JPanel panelBtnAgregar;
+    private javax.swing.JPanel panelBtnAlta;
+    private javax.swing.JPanel panelBtnBuscar;
+    private javax.swing.JPanel panelBtnCancelar;
+    private javax.swing.JPanel panelBtnCrear;
+    private javax.swing.JPanel panelBtnQuitar;
+    private javax.swing.JPanel panelCentral;
+    private javax.swing.JPanel panelDatosPaciente;
+    private javax.swing.JPanel panelDatosPeticion;
+    private javax.swing.JPanel panelInferior;
+    private javax.swing.JPanel panelSuperior;
+    private javax.swing.JRadioButton rBPrioridadNormal;
+    private javax.swing.JRadioButton rBPrioridadUrgente;
+    private javax.swing.JTextField txtApellidos;
+    private javax.swing.JTextField txtApellidos1;
+    private javax.swing.JTextField txtBuscarPrueba;
+    private javax.swing.JTextField txtCip;
+    private javax.swing.JTextField txtFechaNacimiento;
+    private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
 }

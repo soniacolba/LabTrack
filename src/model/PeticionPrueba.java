@@ -3,12 +3,12 @@ package model;
 public class PeticionPrueba {
     
     private int id;
-    private EstadoPeticionPrueba estado;
+    private EnumEstadoPeticionPrueba estado;
     private String resultado;
     private int idPeticion;
     private int idPrueba;
 
-    public PeticionPrueba(int id, EstadoPeticionPrueba estado, String resultado, int idPeticion, int idPrueba) {
+    public PeticionPrueba(int id, EnumEstadoPeticionPrueba estado, String resultado, int idPeticion, int idPrueba) {
         this.id = id;
         this.estado = estado;
         this.resultado = resultado;
@@ -20,7 +20,7 @@ public class PeticionPrueba {
         return id;
     }
 
-    public EstadoPeticionPrueba getEstado() {
+    public EnumEstadoPeticionPrueba getEstado() {
         return estado;
     }
 

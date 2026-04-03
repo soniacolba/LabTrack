@@ -6,6 +6,8 @@ import db.DB;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PacienteDAO {
     
@@ -55,5 +57,37 @@ public class PacienteDAO {
         }
         return null;
     }
+    
+    public List<Paciente> buscarPorApellidos(String apellidos) {
+    List<Paciente> listaPacientes = new ArrayList<>();
+
+    String sql = "SELECT cip, nombre, apellidos, fecha_nacimiento "
+               + "FROM paciente "
+               + "WHERE apellidos LIKE ?";
+
+    try (Connection con = DB.getConnection();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+
+        ps.setString(1, "%" + apellidos + "%");
+
+        try (ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                String cip = rs.getString("cip");
+                String nombre = rs.getString("nombre");
+                String apellidosPaciente = rs.getString("apellidos");
+                LocalDate fecha = LocalDate.parse(rs.getString("fecha_nacimiento"));
+
+                Paciente p = new Paciente(cip, nombre, apellidosPaciente, fecha);
+                listaPacientes.add(p);
+            }
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return listaPacientes;
+}
     
 }

@@ -6,18 +6,26 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.time.LocalDateTime;
-import model.EstadoPeticion;
+import model.EnumEstadoPeticion;
 import model.Peticion;
-import model.Prioridad;
+import model.EnumPrioridad;
 
 public class PeticionDAO {
     
     public int insertar(Peticion p){
+        try (Connection con = DB.getConnection()) {
+            return insertar(con, p);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+    
+    public int insertar(Connection con, Peticion p){
         
         String sql = "INSERT INTO peticion (fecha_registro, prioridad, estado, cip_paciente, id_usuario, id_tipo_muestra) VALUES (?, ?, ?, ?, ?, ?)";
         
-        try (Connection con = DB.getConnection();
-                PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
+        try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
             
             ps.setString(1, p.getFechaRegistro().toString());
             ps.setString(2, p.getPrioridad().name());
@@ -55,8 +63,8 @@ public class PeticionDAO {
                 if (rs.next()) {
 
                     LocalDateTime fecha = LocalDateTime.parse(rs.getString("fecha_registro"));
-                    Prioridad prioridad = Prioridad.valueOf(rs.getString("prioridad"));
-                    EstadoPeticion estado = EstadoPeticion.valueOf(rs.getString("estado"));
+                    EnumPrioridad prioridad = EnumPrioridad.valueOf(rs.getString("prioridad"));
+                    EnumEstadoPeticion estado = EnumEstadoPeticion.valueOf(rs.getString("estado"));
 
                     String cip = rs.getString("cip_paciente");
                     int idUsuario = rs.getInt("id_usuario");
@@ -80,5 +88,4 @@ public class PeticionDAO {
         }
         return null;
     }
-
 }

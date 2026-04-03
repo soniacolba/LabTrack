@@ -9,7 +9,7 @@ package model;
  *
  * @author leia6
  */
-public enum Prioridad {
+public enum EnumPrioridad {
     NORMAL,
     URGENTE
 }

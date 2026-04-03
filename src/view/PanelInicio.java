@@ -5,17 +5,29 @@
  */
 package view;
 
+import java.awt.CardLayout;
+import java.awt.Color;
+import javax.swing.JPanel;
+
 /**
  *
  * @author leia6
  */
 public class PanelInicio extends javax.swing.JPanel {
 
-    /**
-     * Creates new form pnlPantallaPrincipal
-     */
-    public PanelInicio() {
+    private JPanel panelPrincipal;
+    
+    public PanelInicio(JPanel panelPrincipal) {
+        this.panelPrincipal = panelPrincipal;
         initComponents();
+    }
+
+    private void colorEntrar(JPanel panel){
+        panel.setBackground(new Color(230, 232, 235));
+    }
+    
+    private void colorSalir(JPanel panel){
+        panel.setBackground(new Color(243, 245, 249));
     }
 
     /**
@@ -31,13 +43,13 @@ public class PanelInicio extends javax.swing.JPanel {
         lblAcciones = new javax.swing.JLabel();
         pnlTarjetas = new javax.swing.JPanel();
         pnlNuevaPeticion = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
+        lblNuevaPeticion = new javax.swing.JLabel();
         pnlPendienteResultados = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
+        lblPendResultados = new javax.swing.JLabel();
         pnlPendienteValidacion = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
+        lblPendValidacion = new javax.swing.JLabel();
         pnlGenerarInforme = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
+        lblGenerarInforme = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -61,16 +73,28 @@ public class PanelInicio extends javax.swing.JPanel {
         pnlNuevaPeticion.setPreferredSize(new java.awt.Dimension(350, 100));
         pnlNuevaPeticion.setLayout(new java.awt.BorderLayout());
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/nueva_peticion.png"))); // NOI18N
-        jLabel2.setText("Nueva Petición");
-        jLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 20, 1, 1));
-        jLabel2.setMaximumSize(new java.awt.Dimension(400, 120));
-        jLabel2.setMinimumSize(new java.awt.Dimension(400, 120));
-        jLabel2.setName(""); // NOI18N
-        jLabel2.setPreferredSize(new java.awt.Dimension(400, 120));
-        jLabel2.setRequestFocusEnabled(false);
-        pnlNuevaPeticion.add(jLabel2, java.awt.BorderLayout.CENTER);
+        lblNuevaPeticion.setBackground(new java.awt.Color(243, 245, 249));
+        lblNuevaPeticion.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        lblNuevaPeticion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/nueva_peticion.png"))); // NOI18N
+        lblNuevaPeticion.setText("Nueva Petición");
+        lblNuevaPeticion.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 20, 1, 1));
+        lblNuevaPeticion.setMaximumSize(new java.awt.Dimension(400, 120));
+        lblNuevaPeticion.setMinimumSize(new java.awt.Dimension(400, 120));
+        lblNuevaPeticion.setName(""); // NOI18N
+        lblNuevaPeticion.setPreferredSize(new java.awt.Dimension(400, 120));
+        lblNuevaPeticion.setRequestFocusEnabled(false);
+        lblNuevaPeticion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblNuevaPeticionMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                lblNuevaPeticionMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                lblNuevaPeticionMouseExited(evt);
+            }
+        });
+        pnlNuevaPeticion.add(lblNuevaPeticion, java.awt.BorderLayout.CENTER);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -87,15 +111,26 @@ public class PanelInicio extends javax.swing.JPanel {
         pnlPendienteResultados.setPreferredSize(new java.awt.Dimension(350, 100));
         pnlPendienteResultados.setLayout(new java.awt.BorderLayout());
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pendiente_resultados.png"))); // NOI18N
-        jLabel3.setText("<html>Pendientes de<br>resultados</html>");
-        jLabel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 20, 1, 1));
-        jLabel3.setMaximumSize(new java.awt.Dimension(400, 120));
-        jLabel3.setMinimumSize(new java.awt.Dimension(400, 120));
-        jLabel3.setPreferredSize(new java.awt.Dimension(400, 120));
-        jLabel3.setRequestFocusEnabled(false);
-        pnlPendienteResultados.add(jLabel3, java.awt.BorderLayout.CENTER);
+        lblPendResultados.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        lblPendResultados.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pendiente_resultados.png"))); // NOI18N
+        lblPendResultados.setText("<html>Pendientes de<br>resultados</html>");
+        lblPendResultados.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 20, 1, 1));
+        lblPendResultados.setMaximumSize(new java.awt.Dimension(400, 120));
+        lblPendResultados.setMinimumSize(new java.awt.Dimension(400, 120));
+        lblPendResultados.setPreferredSize(new java.awt.Dimension(400, 120));
+        lblPendResultados.setRequestFocusEnabled(false);
+        lblPendResultados.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblPendResultadosMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                lblPendResultadosMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                lblPendResultadosMouseExited(evt);
+            }
+        });
+        pnlPendienteResultados.add(lblPendResultados, java.awt.BorderLayout.CENTER);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -112,15 +147,26 @@ public class PanelInicio extends javax.swing.JPanel {
         pnlPendienteValidacion.setPreferredSize(new java.awt.Dimension(350, 100));
         pnlPendienteValidacion.setLayout(new java.awt.BorderLayout());
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pendiente_validacion.png"))); // NOI18N
-        jLabel4.setText("<html>Pendientes de<br>validación</html>");
-        jLabel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 20, 1, 1));
-        jLabel4.setMaximumSize(new java.awt.Dimension(400, 120));
-        jLabel4.setMinimumSize(new java.awt.Dimension(400, 120));
-        jLabel4.setPreferredSize(new java.awt.Dimension(400, 120));
-        jLabel4.setRequestFocusEnabled(false);
-        pnlPendienteValidacion.add(jLabel4, java.awt.BorderLayout.CENTER);
+        lblPendValidacion.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        lblPendValidacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pendiente_validacion.png"))); // NOI18N
+        lblPendValidacion.setText("<html>Pendientes de<br>validación</html>");
+        lblPendValidacion.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 20, 1, 1));
+        lblPendValidacion.setMaximumSize(new java.awt.Dimension(400, 120));
+        lblPendValidacion.setMinimumSize(new java.awt.Dimension(400, 120));
+        lblPendValidacion.setPreferredSize(new java.awt.Dimension(400, 120));
+        lblPendValidacion.setRequestFocusEnabled(false);
+        lblPendValidacion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblPendValidacionMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                lblPendValidacionMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                lblPendValidacionMouseExited(evt);
+            }
+        });
+        pnlPendienteValidacion.add(lblPendValidacion, java.awt.BorderLayout.CENTER);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -137,15 +183,26 @@ public class PanelInicio extends javax.swing.JPanel {
         pnlGenerarInforme.setPreferredSize(new java.awt.Dimension(350, 100));
         pnlGenerarInforme.setLayout(new java.awt.BorderLayout());
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/generar_informe.png"))); // NOI18N
-        jLabel5.setText("Generar informe");
-        jLabel5.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 20, 1, 1));
-        jLabel5.setMaximumSize(new java.awt.Dimension(400, 120));
-        jLabel5.setMinimumSize(new java.awt.Dimension(400, 120));
-        jLabel5.setPreferredSize(new java.awt.Dimension(400, 120));
-        jLabel5.setRequestFocusEnabled(false);
-        pnlGenerarInforme.add(jLabel5, java.awt.BorderLayout.CENTER);
+        lblGenerarInforme.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        lblGenerarInforme.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/generar_informe.png"))); // NOI18N
+        lblGenerarInforme.setText("Generar informe");
+        lblGenerarInforme.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 20, 1, 1));
+        lblGenerarInforme.setMaximumSize(new java.awt.Dimension(400, 120));
+        lblGenerarInforme.setMinimumSize(new java.awt.Dimension(400, 120));
+        lblGenerarInforme.setPreferredSize(new java.awt.Dimension(400, 120));
+        lblGenerarInforme.setRequestFocusEnabled(false);
+        lblGenerarInforme.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblGenerarInformeMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                lblGenerarInformeMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                lblGenerarInformeMouseExited(evt);
+            }
+        });
+        pnlGenerarInforme.add(lblGenerarInforme, java.awt.BorderLayout.CENTER);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -157,13 +214,62 @@ public class PanelInicio extends javax.swing.JPanel {
         add(pnlTarjetas, new org.netbeans.lib.awtextra.AbsoluteConstraints(102, 118, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
+    private void lblNuevaPeticionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblNuevaPeticionMouseClicked
+        ((CardLayout) panelPrincipal.getLayout())
+        .show(panelPrincipal, "Nueva Peticion");
+    }//GEN-LAST:event_lblNuevaPeticionMouseClicked
+
+    private void lblNuevaPeticionMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblNuevaPeticionMouseEntered
+        colorEntrar(pnlNuevaPeticion);
+    }//GEN-LAST:event_lblNuevaPeticionMouseEntered
+
+    private void lblNuevaPeticionMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblNuevaPeticionMouseExited
+        colorSalir(pnlNuevaPeticion);
+    }//GEN-LAST:event_lblNuevaPeticionMouseExited
+
+    private void lblPendResultadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblPendResultadosMouseClicked
+        
+    }//GEN-LAST:event_lblPendResultadosMouseClicked
+
+    private void lblPendResultadosMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblPendResultadosMouseEntered
+        colorEntrar(pnlPendienteResultados);
+    }//GEN-LAST:event_lblPendResultadosMouseEntered
+
+    private void lblPendResultadosMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblPendResultadosMouseExited
+        colorSalir(pnlPendienteResultados);
+    }//GEN-LAST:event_lblPendResultadosMouseExited
+
+    private void lblPendValidacionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblPendValidacionMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lblPendValidacionMouseClicked
+
+    private void lblPendValidacionMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblPendValidacionMouseEntered
+        colorEntrar(pnlPendienteValidacion);
+    }//GEN-LAST:event_lblPendValidacionMouseEntered
+
+    private void lblPendValidacionMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblPendValidacionMouseExited
+        colorSalir(pnlPendienteValidacion);
+    }//GEN-LAST:event_lblPendValidacionMouseExited
+
+    private void lblGenerarInformeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblGenerarInformeMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lblGenerarInformeMouseClicked
+
+    private void lblGenerarInformeMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblGenerarInformeMouseEntered
+        colorEntrar(pnlGenerarInforme);
+    }//GEN-LAST:event_lblGenerarInformeMouseEntered
+
+    private void lblGenerarInformeMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblGenerarInformeMouseExited
+        colorSalir(pnlGenerarInforme);
+    }//GEN-LAST:event_lblGenerarInformeMouseExited
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel lblAcciones;
+    private javax.swing.JLabel lblGenerarInforme;
+    private javax.swing.JLabel lblNuevaPeticion;
+    private javax.swing.JLabel lblPendResultados;
+    private javax.swing.JLabel lblPendValidacion;
     private javax.swing.JPanel pnlGenerarInforme;
     private javax.swing.JPanel pnlNuevaPeticion;
     private javax.swing.JPanel pnlPendienteResultados;

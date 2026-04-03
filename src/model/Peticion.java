@@ -7,14 +7,14 @@ public class Peticion {
     
     private int idPeticion;
     private LocalDateTime fechaRegistro;
-    private Prioridad prioridad;
-    private EstadoPeticion estado;
+    private EnumPrioridad prioridad;
+    private EnumEstadoPeticion estado;
     
     private String cipPaciente;
     private int idUsuario;
     private int idTipoMuestra;
 
-    public Peticion(int idPeticion, LocalDateTime fechaRegistro, Prioridad prioridad, EstadoPeticion estado, String cipPaciente, int idUsuario, int idTipoMuestra) {
+    public Peticion(int idPeticion, LocalDateTime fechaRegistro, EnumPrioridad prioridad, EnumEstadoPeticion estado, String cipPaciente, int idUsuario, int idTipoMuestra) {
         this.idPeticion = idPeticion;
         this.fechaRegistro = fechaRegistro;
         this.prioridad = prioridad;
@@ -32,11 +32,11 @@ public class Peticion {
         return fechaRegistro;
     }
 
-    public Prioridad getPrioridad() {
+    public EnumPrioridad getPrioridad() {
         return prioridad;
     }
 
-    public EstadoPeticion getEstado() {
+    public EnumEstadoPeticion getEstado() {
         return estado;
     }
 

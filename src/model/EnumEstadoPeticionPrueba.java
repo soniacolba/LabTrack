@@ -1,6 +1,6 @@
 package model;
 
-public enum EstadoPeticionPrueba {
+public enum EnumEstadoPeticionPrueba {
     
     PENDIENTE,
     REALIZADA,

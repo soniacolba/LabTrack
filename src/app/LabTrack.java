@@ -9,10 +9,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import model.EstadoPeticion;
+import model.EnumEstadoPeticion;
 import model.Paciente;
 import model.Peticion;
-import model.Prioridad;
+import model.EnumPrioridad;
 
 
 public class LabTrack {
@@ -31,12 +31,11 @@ public class LabTrack {
         PeticionDAO peticionDAO = new PeticionDAO();
         PeticionPruebaDAO ppDAO = new PeticionPruebaDAO();
 
-        // Asegúrate de que existe el paciente CIP 123456789 (ya lo usabas)
         Peticion p = new Peticion(
                 0,
                 LocalDateTime.now(),
-                Prioridad.NORMAL,
-                EstadoPeticion.PENDIENTE,
+                EnumPrioridad.NORMAL,
+                EnumEstadoPeticion.PENDIENTE,
                 "123456789", // CIP existente
                 1,           // usuario seed (id 1)
                 1            // tipo muestra seed (id 1: Sangre)
