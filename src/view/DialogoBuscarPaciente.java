@@ -118,10 +118,10 @@ public class DialogoBuscarPaciente extends javax.swing.JDialog {
         jLabel4.setText("CIP");
         formularioPaciente.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(364, 31, -1, -1));
 
-        txtApellidos.setBackground(new java.awt.Color(255, 255, 255));
+        txtApellidos.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         formularioPaciente.add(txtApellidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 336, 29));
 
-        txtCip.setBackground(new java.awt.Color(255, 255, 255));
+        txtCip.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         formularioPaciente.add(txtCip, new org.netbeans.lib.awtextra.AbsoluteConstraints(364, 59, 336, 29));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
@@ -157,6 +157,7 @@ public class DialogoBuscarPaciente extends javax.swing.JDialog {
 
         formularioPaciente.add(panelBtnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(559, 130, 140, -1));
 
+        tblResultados.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         tblResultados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -286,8 +287,8 @@ public class DialogoBuscarPaciente extends javax.swing.JDialog {
 
         if (fila != -1) {
             String cip = tblResultados.getValueAt(fila, 0).toString();
-            String nombre = tblResultados.getValueAt(fila, 1).toString();
-            String apellidos = tblResultados.getValueAt(fila, 2).toString();
+            String apellidos = tblResultados.getValueAt(fila, 1).toString();
+            String nombre = tblResultados.getValueAt(fila, 2).toString();
             LocalDate fecha = LocalDate.parse(tblResultados.getValueAt(fila, 3).toString());
 
             pacienteSeleccionado = new Paciente(cip, nombre, apellidos, fecha);
@@ -350,47 +351,7 @@ public class DialogoBuscarPaciente extends javax.swing.JDialog {
         }
     }
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(DialogoBuscarPaciente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(DialogoBuscarPaciente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(DialogoBuscarPaciente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(DialogoBuscarPaciente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                DialogoBuscarPaciente dialog = new DialogoBuscarPaciente(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btnAceptar;

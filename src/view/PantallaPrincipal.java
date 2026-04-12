@@ -21,7 +21,7 @@ public final class PantallaPrincipal extends javax.swing.JFrame {
 
     public PantallaPrincipal() {
         initComponents();
-        setSize(1300, 1000);
+        setSize(1500, 1200);
         setLocationRelativeTo(null);
 
         cardLayout = new CardLayout();
@@ -29,9 +29,11 @@ public final class PantallaPrincipal extends javax.swing.JFrame {
 
         PanelInicio menuInicio = new PanelInicio(panelPrincipal);
         PanelNuevaPeticion pnlNuevaPeticion = new PanelNuevaPeticion(panelPrincipal);
+        PanelBuscarPeticion pnlBuscarPeticion = new PanelBuscarPeticion(panelPrincipal);
 
         panelPrincipal.add(menuInicio, "Pantalla Inicio");
         panelPrincipal.add(pnlNuevaPeticion, "Nueva Peticion");
+        panelPrincipal.add(pnlBuscarPeticion, "Buscar Peticion");
 
         aplicarHover(btnNuevaPeticion);
         aplicarHover(btnBuscarPeticion);
@@ -158,6 +160,11 @@ public final class PantallaPrincipal extends javax.swing.JFrame {
         btnBuscarPeticion.setBorderPainted(false);
         btnBuscarPeticion.setContentAreaFilled(false);
         btnBuscarPeticion.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnBuscarPeticion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarPeticionActionPerformed(evt);
+            }
+        });
         menuPeticiones.add(btnBuscarPeticion, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 140, 220, 40));
 
         btnNuevaPeticion.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
@@ -345,6 +352,10 @@ public final class PantallaPrincipal extends javax.swing.JFrame {
     private void btnRegistrarPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarPacienteActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnRegistrarPacienteActionPerformed
+
+    private void btnBuscarPeticionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarPeticionActionPerformed
+        cardLayout.show(panelPrincipal, "Buscar Peticion");
+    }//GEN-LAST:event_btnBuscarPeticionActionPerformed
 
     /**
      * @param args the command line arguments

@@ -7,6 +7,7 @@ package view;
 
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import javax.swing.JPanel;
 
 /**
@@ -24,6 +25,7 @@ public class PanelInicio extends javax.swing.JPanel {
 
     private void colorEntrar(JPanel panel){
         panel.setBackground(new Color(230, 232, 235));
+        panel.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
     
     private void colorSalir(JPanel panel){

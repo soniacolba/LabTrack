@@ -51,43 +51,43 @@ public class PacienteDAO {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
-    
+
     public List<Paciente> buscarPorApellidos(String apellidos) {
-    List<Paciente> listaPacientes = new ArrayList<>();
+        List<Paciente> listaPacientes = new ArrayList<>();
 
-    String sql = "SELECT cip, nombre, apellidos, fecha_nacimiento "
-               + "FROM paciente "
-               + "WHERE apellidos LIKE ?";
+        String sql = "SELECT cip, nombre, apellidos, fecha_nacimiento "
+                + "FROM paciente "
+                + "WHERE apellidos LIKE ?";
 
-    try (Connection con = DB.getConnection();
-         PreparedStatement ps = con.prepareStatement(sql)) {
+        try (Connection con = DB.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)) {
 
-        ps.setString(1, "%" + apellidos + "%");
+            ps.setString(1, "%" + apellidos + "%");
 
-        try (ResultSet rs = ps.executeQuery()) {
+            try (ResultSet rs = ps.executeQuery()) {
 
-            while (rs.next()) {
-                String cip = rs.getString("cip");
-                String nombre = rs.getString("nombre");
-                String apellidosPaciente = rs.getString("apellidos");
-                LocalDate fecha = LocalDate.parse(rs.getString("fecha_nacimiento"));
+                while (rs.next()) {
+                    String cip = rs.getString("cip");
+                    String nombre = rs.getString("nombre");
+                    String apellidosPaciente = rs.getString("apellidos");
+                    LocalDate fecha = LocalDate.parse(rs.getString("fecha_nacimiento"));
 
-                Paciente p = new Paciente(cip, nombre, apellidosPaciente, fecha);
-                listaPacientes.add(p);
+                    Paciente p = new Paciente(cip, nombre, apellidosPaciente, fecha);
+                    listaPacientes.add(p);
+                }
             }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-    } catch (Exception e) {
-        e.printStackTrace();
+        return listaPacientes;
     }
 
-    return listaPacientes;
-}
-    
 }

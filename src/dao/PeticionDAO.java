@@ -20,9 +20,27 @@ public class PeticionDAO {
             return -1;
         }
     }
-    
-    public int insertar(Connection con, Peticion p){
-        
+
+    public boolean actualizar(Connection con, Peticion peticion) {
+        String sql = "UPDATE peticion "
+                + "SET prioridad = ?, id_tipo_muestra = ? "
+                + "WHERE id_peticion = ?";
+
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, peticion.getPrioridad().name());
+            ps.setInt(2, peticion.getIdTipoMuestra());
+            ps.setInt(3, peticion.getIdPeticion());
+
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public int insertar(Connection con, Peticion p) {
+
         String sql = "INSERT INTO peticion (fecha_registro, prioridad, estado, cip_paciente, id_usuario, id_tipo_muestra) VALUES (?, ?, ?, ?, ?, ?)";
         
         try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
@@ -88,4 +106,17 @@ public class PeticionDAO {
         }
         return null;
     }
+    
+    public boolean actualizarEstado(Connection con, int idPeticion, EnumEstadoPeticion estado) {
+    String sql = "UPDATE peticion SET estado = ? WHERE id_peticion = ?";
+
+    try (PreparedStatement ps = con.prepareStatement(sql)) {
+        ps.setString(1, estado.name());
+        ps.setInt(2, idPeticion);
+        return ps.executeUpdate() > 0;
+    } catch (Exception e) {
+        e.printStackTrace();
+        return false;
+    }
+}
 }
