@@ -30,10 +30,14 @@ public final class PantallaPrincipal extends javax.swing.JFrame {
         PanelInicio menuInicio = new PanelInicio(panelPrincipal);
         PanelNuevaPeticion pnlNuevaPeticion = new PanelNuevaPeticion(panelPrincipal);
         PanelBuscarPeticion pnlBuscarPeticion = new PanelBuscarPeticion(panelPrincipal);
-
+        PanelBuscarPaciente pnlBuscarPaciente = new PanelBuscarPaciente(panelPrincipal);
+        PanelHistoricoPaciente pnlHistoricoPaciente = new PanelHistoricoPaciente(panelPrincipal);
+        
         panelPrincipal.add(menuInicio, "Pantalla Inicio");
         panelPrincipal.add(pnlNuevaPeticion, "Nueva Peticion");
         panelPrincipal.add(pnlBuscarPeticion, "Buscar Peticion");
+        panelPrincipal.add(pnlBuscarPaciente, "Buscar Paciente");
+        panelPrincipal.add(pnlHistoricoPaciente, "Historico paciente");
 
         aplicarHover(btnNuevaPeticion);
         aplicarHover(btnBuscarPeticion);
@@ -338,11 +342,11 @@ public final class PantallaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPendienteResultadosActionPerformed
 
     private void btnBuscarPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarPacienteActionPerformed
-        // TODO add your handling code here:
+        cardLayout.show(panelPrincipal, "Buscar Paciente");
     }//GEN-LAST:event_btnBuscarPacienteActionPerformed
 
     private void btnHistoricoPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistoricoPacienteActionPerformed
-        // TODO add your handling code here:
+        cardLayout.show(panelPrincipal, "Historico paciente");
     }//GEN-LAST:event_btnHistoricoPacienteActionPerformed
 
     private void btnInformePeticionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInformePeticionActionPerformed
@@ -350,7 +354,9 @@ public final class PantallaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnInformePeticionActionPerformed
 
     private void btnRegistrarPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarPacienteActionPerformed
-        // TODO add your handling code here:
+        DialogoAltaPaciente dialog = new DialogoAltaPaciente(this, true);
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
     }//GEN-LAST:event_btnRegistrarPacienteActionPerformed
 
     private void btnBuscarPeticionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarPeticionActionPerformed

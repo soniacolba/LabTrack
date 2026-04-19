@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import model.EnumEstadoPeticion;
 import model.Peticion;
 import model.EnumPrioridad;
@@ -106,17 +108,56 @@ public class PeticionDAO {
         }
         return null;
     }
-    
-    public boolean actualizarEstado(Connection con, int idPeticion, EnumEstadoPeticion estado) {
-    String sql = "UPDATE peticion SET estado = ? WHERE id_peticion = ?";
 
-    try (PreparedStatement ps = con.prepareStatement(sql)) {
-        ps.setString(1, estado.name());
-        ps.setInt(2, idPeticion);
-        return ps.executeUpdate() > 0;
-    } catch (Exception e) {
-        e.printStackTrace();
-        return false;
+    public boolean actualizarEstado(Connection con, int idPeticion, EnumEstadoPeticion estado) {
+        String sql = "UPDATE peticion SET estado = ? WHERE id_peticion = ?";
+
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, estado.name());
+            ps.setInt(2, idPeticion);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
-}
+
+    public List<Peticion> listarPorCip(String cip) {
+
+        List<Peticion> lista = new ArrayList<>();
+
+        String sql = "SELECT id_peticion, fecha_registro, prioridad, estado, cip_paciente, id_usuario, id_tipo_muestra "
+                + "FROM peticion WHERE cip_paciente = ? ORDER BY fecha_registro DESC";
+
+        try (Connection con = DB.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, cip);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    LocalDateTime fecha = LocalDateTime.parse(rs.getString("fecha_registro"));
+                    EnumPrioridad prioridad = EnumPrioridad.valueOf(rs.getString("prioridad"));
+                    EnumEstadoPeticion estado = EnumEstadoPeticion.valueOf(rs.getString("estado"));
+
+                    Peticion p = new Peticion(
+                            rs.getInt("id_peticion"),
+                            fecha,
+                            prioridad,
+                            estado,
+                            rs.getString("cip_paciente"),
+                            rs.getInt("id_usuario"),
+                            rs.getInt("id_tipo_muestra")
+                    );
+
+                    lista.add(p);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return lista;
+    }
 }

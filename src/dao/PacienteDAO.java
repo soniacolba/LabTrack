@@ -90,4 +90,23 @@ public class PacienteDAO {
         return listaPacientes;
     }
 
+    public boolean actualizar(Paciente p) {
+        String sql = "UPDATE paciente SET nombre = ?, apellidos = ?, fecha_nacimiento = ? WHERE cip = ?";
+
+        try (Connection con = DB.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, p.getNombre());
+            ps.setString(2, p.getApellidos());
+            ps.setString(3, p.getFechaNacimiento().toString());
+            ps.setString(4, p.getCip());
+
+            return ps.executeUpdate() == 1;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }
