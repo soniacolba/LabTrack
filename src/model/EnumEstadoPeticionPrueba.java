@@ -4,6 +4,7 @@ public enum EnumEstadoPeticionPrueba {
     
     PENDIENTE,
     REALIZADA,
-    VALIDADA
+    VALIDADA,
+    ANULADA
     
 }

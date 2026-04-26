@@ -108,4 +108,57 @@ public class PeticionPruebaDAO {
             return false;
         }
     }
+
+    public List<PeticionPrueba> listarPorPeticion(int idPeticion) {
+
+        List<PeticionPrueba> lista = new ArrayList<>();
+
+        String sql = "SELECT id, estado, resultado, id_peticion, id_prueba "
+                + "FROM peticion_prueba WHERE id_peticion = ?";
+
+        try (Connection con = DB.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, idPeticion);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+
+                    PeticionPrueba pp = new PeticionPrueba(
+                            rs.getInt("id"),
+                            EnumEstadoPeticionPrueba.valueOf(rs.getString("estado")),
+                            rs.getString("resultado"),
+                            rs.getInt("id_peticion"),
+                            rs.getInt("id_prueba")
+                    );
+
+                    lista.add(pp);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return lista;
+    }
+    
+    public boolean anularPorPeticion(Connection con, int idPeticion, String motivo) {
+    String sql = "UPDATE peticion_prueba "
+            + "SET estado = ?, resultado = ? "
+            + "WHERE id_peticion = ?";
+
+    try (PreparedStatement ps = con.prepareStatement(sql)) {
+        ps.setString(1, EnumEstadoPeticionPrueba.ANULADA.name());
+        ps.setString(2, "ANULADA - " + motivo);
+        ps.setInt(3, idPeticion);
+
+        return ps.executeUpdate() > 0;
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        return false;
+    }
+}
+    
 }

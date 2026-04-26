@@ -262,7 +262,7 @@ public class PanelNuevaPeticion extends javax.swing.JPanel {
         btnBuscar.setForeground(new java.awt.Color(255, 255, 255));
         btnBuscar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lupab.png"))); // NOI18N
-        btnBuscar.setText("Buscar");
+        btnBuscar.setText("Buscar paciente");
         btnBuscar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnBuscarMouseClicked(evt);
@@ -273,14 +273,14 @@ public class PanelNuevaPeticion extends javax.swing.JPanel {
         panelBtnBuscar.setLayout(panelBtnBuscarLayout);
         panelBtnBuscarLayout.setHorizontalGroup(
             panelBtnBuscarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btnBuscar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
+            .addComponent(btnBuscar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
         );
         panelBtnBuscarLayout.setVerticalGroup(
             panelBtnBuscarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(btnBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
         );
 
-        jPanel6.add(panelBtnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 0, -1, -1));
+        jPanel6.add(panelBtnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(49, 0, 170, -1));
 
         datosPaciente.add(jPanel6, java.awt.BorderLayout.LINE_END);
 
@@ -380,7 +380,7 @@ public class PanelNuevaPeticion extends javax.swing.JPanel {
         formularioPeticion.setMinimumSize(new java.awt.Dimension(1006, 400));
         formularioPeticion.setName(""); // NOI18N
         formularioPeticion.setOpaque(false);
-        formularioPeticion.setPreferredSize(new java.awt.Dimension(1006, 230));
+        formularioPeticion.setPreferredSize(new java.awt.Dimension(1006, 400));
         formularioPeticion.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
@@ -444,7 +444,6 @@ public class PanelNuevaPeticion extends javax.swing.JPanel {
 
         buttonGroupPrioridad.add(rBPrioridadNormal);
         rBPrioridadNormal.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        rBPrioridadNormal.setSelected(true);
         rBPrioridadNormal.setText("Normal");
         rBPrioridadNormal.setOpaque(false);
         formularioPeticion.add(rBPrioridadNormal, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 50, -1, -1));
@@ -598,25 +597,6 @@ public class PanelNuevaPeticion extends javax.swing.JPanel {
         add(panelInferior, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnBuscarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBuscarMouseClicked
-        DialogoBuscarPaciente dialog = new DialogoBuscarPaciente(null, true);
-        dialog.setLocationRelativeTo(this);
-        dialog.setVisible(true);
-
-        Paciente p = dialog.getPacienteSeleccionado();
-
-        if (p != null) {
-            txtNombre.setText(p.getNombre());
-            txtApellidos.setText(p.getApellidos());
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            txtFechaNacimiento.setText(p.getFechaNacimiento().format(formatter));
-            txtCip.setText(p.getCip());
-            habilitarDetallesPeticion(true);
-        }
-
-
-    }//GEN-LAST:event_btnBuscarMouseClicked
-
     private void btnCrearMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCrearMouseClicked
         if (txtCip.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Debes seleccionar un paciente.");
@@ -642,13 +622,13 @@ public class PanelNuevaPeticion extends javax.swing.JPanel {
         }
 
         Peticion peticion = new Peticion(
-                0,
-                java.time.LocalDateTime.now(),
-                prioridad,
-                EnumEstadoPeticion.PENDIENTE,
-                txtCip.getText().trim(),
-                1,
-                tipoMuestra.getId()
+            0,
+            java.time.LocalDateTime.now(),
+            prioridad,
+            EnumEstadoPeticion.PENDIENTE,
+            txtCip.getText().trim(),
+            1,
+            tipoMuestra.getId()
         );
 
         Connection con = null;
@@ -670,11 +650,11 @@ public class PanelNuevaPeticion extends javax.swing.JPanel {
                 Prueba prueba = modeloAnadidas.getElementAt(i);
 
                 PeticionPrueba peticionPrueba = new PeticionPrueba(
-                        0,
-                        EnumEstadoPeticionPrueba.PENDIENTE,
-                        null,
-                        idPeticion,
-                        prueba.getId()
+                    0,
+                    EnumEstadoPeticionPrueba.PENDIENTE,
+                    null,
+                    idPeticion,
+                    prueba.getId()
                 );
 
                 boolean insertada = peticionPruebaDAO.insertar(con, peticionPrueba);
@@ -719,31 +699,117 @@ public class PanelNuevaPeticion extends javax.swing.JPanel {
 
     private void btnCancelarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCancelarMouseClicked
         boolean hayDatos = !txtCip.getText().trim().isEmpty()
-                || !txtNombre.getText().trim().isEmpty()
-                || !txtApellidos.getText().trim().isEmpty()
-                || !txtFechaNacimiento.getText().trim().isEmpty()
-                || comboTipoMuestra.getSelectedIndex() > 0
-                || !modeloAnadidas.isEmpty();
+        || !txtNombre.getText().trim().isEmpty()
+        || !txtApellidos.getText().trim().isEmpty()
+        || !txtFechaNacimiento.getText().trim().isEmpty()
+        || comboTipoMuestra.getSelectedIndex() > 0
+        || !modeloAnadidas.isEmpty();
 
         if (hayDatos) {
             int opcion = JOptionPane.showConfirmDialog(
-                    this,
-                    "Se perderán los datos introducidos. ¿Deseas cancelar?",
-                    "Confirmar cancelación",
-                    JOptionPane.YES_NO_OPTION
+                this,
+                "Se perderán los datos introducidos. ¿Deseas cancelar?",
+                "Confirmar cancelación",
+                JOptionPane.YES_NO_OPTION
             );
 
             if (opcion != JOptionPane.YES_OPTION) {
                 return;
             }
         }
-        
+
         limpiarFormulario();
-        
 
         CardLayout cl = (CardLayout) panelPrincipal.getLayout();
         cl.show(panelPrincipal, "Pantalla Inicio");
     }//GEN-LAST:event_btnCancelarMouseClicked
+
+    private void btnQuitarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnQuitarMouseClicked
+        Prueba pruebaSeleccionada = lstPruebasAnadidas.getSelectedValue();
+
+        if (pruebaSeleccionada != null) {
+            modeloAnadidas.removeElement(pruebaSeleccionada);
+            ordenAlfabeticoListas(modeloDisponibles, pruebaSeleccionada);
+        }
+    }//GEN-LAST:event_btnQuitarMouseClicked
+
+    private void btnAgregarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarMouseClicked
+        Prueba pruebaSeleccionada = lstPruebasDisponibles.getSelectedValue();
+
+        if (pruebaSeleccionada != null) {
+            modeloDisponibles.removeElement(pruebaSeleccionada);
+            ordenAlfabeticoListas(modeloAnadidas, pruebaSeleccionada);
+        }
+    }//GEN-LAST:event_btnAgregarMouseClicked
+
+    private void rBPrioridadUrgenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rBPrioridadUrgenteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_rBPrioridadUrgenteActionPerformed
+
+    private void lstPruebasAnadidasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstPruebasAnadidasMouseClicked
+        if (evt.getClickCount() == 2) {
+            Prueba pruebaSeleccionada = lstPruebasAnadidas.getSelectedValue();
+
+            if (pruebaSeleccionada != null) {
+                modeloAnadidas.removeElement(pruebaSeleccionada);
+                ordenAlfabeticoListas(modeloDisponibles, pruebaSeleccionada);
+            }
+        }
+    }//GEN-LAST:event_lstPruebasAnadidasMouseClicked
+
+    private void txtBuscarPruebaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarPruebaKeyReleased
+        filtrarPruebas();
+    }//GEN-LAST:event_txtBuscarPruebaKeyReleased
+
+    private void txtBuscarPruebaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBuscarPruebaFocusLost
+        if (txtBuscarPrueba.getText().trim().isEmpty()) {
+            txtBuscarPrueba.setText("Buscar prueba...");
+            txtBuscarPrueba.setForeground(Color.GRAY);
+        }
+    }//GEN-LAST:event_txtBuscarPruebaFocusLost
+
+    private void txtBuscarPruebaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBuscarPruebaFocusGained
+        if (txtBuscarPrueba.getText().equals("Buscar prueba...")) {
+            txtBuscarPrueba.setText("");
+            txtBuscarPrueba.setForeground(Color.black);
+        }
+    }//GEN-LAST:event_txtBuscarPruebaFocusGained
+
+    private void lstPruebasDisponiblesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstPruebasDisponiblesMouseClicked
+        if (evt.getClickCount() == 2) {
+            Prueba pruebaSeleccionada = lstPruebasDisponibles.getSelectedValue();
+
+            if (pruebaSeleccionada != null) {
+                modeloDisponibles.removeElement(pruebaSeleccionada);
+                ordenAlfabeticoListas(modeloAnadidas, pruebaSeleccionada);
+            }
+        }
+    }//GEN-LAST:event_lstPruebasDisponiblesMouseClicked
+
+    private void comboTipoMuestraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboTipoMuestraActionPerformed
+
+        if (limpiar) {
+            return;
+        }
+
+        if (!modeloAnadidas.isEmpty()) {
+
+            int opcion = JOptionPane.showConfirmDialog(
+                this,
+                "Se eliminarán las pruebas añadidas. ¿Deseas continuar?",
+                "Cambiar tipo de muestra",
+                JOptionPane.YES_NO_OPTION
+            );
+
+            if (opcion == JOptionPane.NO_OPTION) {
+                comboTipoMuestra.setSelectedIndex(indiceTipoMuestra);
+                return;
+            }
+        }
+
+        indiceTipoMuestra = comboTipoMuestra.getSelectedIndex();
+        cargarPruebasDisponibles();
+    }//GEN-LAST:event_comboTipoMuestraActionPerformed
 
     private void btnAltaPacienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAltaPacienteMouseClicked
         DialogoAltaPaciente dialog = new DialogoAltaPaciente(null, true);
@@ -760,95 +826,26 @@ public class PanelNuevaPeticion extends javax.swing.JPanel {
             txtFechaNacimiento.setText(p.getFechaNacimiento().format(formatter));
             habilitarDetallesPeticion(true);
         }
-        
+
     }//GEN-LAST:event_btnAltaPacienteMouseClicked
 
-    private void rBPrioridadUrgenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rBPrioridadUrgenteActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_rBPrioridadUrgenteActionPerformed
+    private void btnBuscarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBuscarMouseClicked
+        DialogoBuscarPaciente dialog = new DialogoBuscarPaciente(null, true);
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
 
-    private void comboTipoMuestraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboTipoMuestraActionPerformed
-        
-        if (limpiar) {
-            return;
-        }
-        
-        if (!modeloAnadidas.isEmpty()) {
+        Paciente p = dialog.getPacienteSeleccionado();
 
-            int opcion = JOptionPane.showConfirmDialog(
-                    this,
-                    "Se eliminarán las pruebas añadidas. ¿Deseas continuar?",
-                    "Cambiar tipo de muestra",
-                    JOptionPane.YES_NO_OPTION
-            );
-
-            if (opcion == JOptionPane.NO_OPTION) {
-                comboTipoMuestra.setSelectedIndex(indiceTipoMuestra);
-                return;
-            }
+        if (p != null) {
+            txtNombre.setText(p.getNombre());
+            txtApellidos.setText(p.getApellidos());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            txtFechaNacimiento.setText(p.getFechaNacimiento().format(formatter));
+            txtCip.setText(p.getCip());
+            habilitarDetallesPeticion(true);
         }
 
-        indiceTipoMuestra = comboTipoMuestra.getSelectedIndex();
-        cargarPruebasDisponibles();
-    }//GEN-LAST:event_comboTipoMuestraActionPerformed
-
-    private void txtBuscarPruebaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBuscarPruebaFocusGained
-        if (txtBuscarPrueba.getText().equals("Buscar prueba...")) {
-            txtBuscarPrueba.setText("");
-            txtBuscarPrueba.setForeground(Color.black);
-        }
-    }//GEN-LAST:event_txtBuscarPruebaFocusGained
-
-    private void txtBuscarPruebaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBuscarPruebaFocusLost
-        if (txtBuscarPrueba.getText().trim().isEmpty()) {
-            txtBuscarPrueba.setText("Buscar prueba...");
-            txtBuscarPrueba.setForeground(Color.GRAY);
-        }
-    }//GEN-LAST:event_txtBuscarPruebaFocusLost
-
-    private void btnAgregarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarMouseClicked
-        Prueba pruebaSeleccionada = lstPruebasDisponibles.getSelectedValue();
-        
-        if (pruebaSeleccionada != null) {
-            modeloDisponibles.removeElement(pruebaSeleccionada);
-            ordenAlfabeticoListas(modeloAnadidas, pruebaSeleccionada);
-        }
-    }//GEN-LAST:event_btnAgregarMouseClicked
-
-    private void btnQuitarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnQuitarMouseClicked
-        Prueba pruebaSeleccionada = lstPruebasAnadidas.getSelectedValue();
-
-        if (pruebaSeleccionada != null) {
-            modeloAnadidas.removeElement(pruebaSeleccionada);
-            ordenAlfabeticoListas(modeloDisponibles, pruebaSeleccionada);
-        }
-    }//GEN-LAST:event_btnQuitarMouseClicked
-
-    private void lstPruebasDisponiblesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstPruebasDisponiblesMouseClicked
-        if (evt.getClickCount() == 2) {
-            Prueba pruebaSeleccionada = lstPruebasDisponibles.getSelectedValue();
-
-            if (pruebaSeleccionada != null) {
-                modeloDisponibles.removeElement(pruebaSeleccionada);
-                ordenAlfabeticoListas(modeloAnadidas, pruebaSeleccionada);
-            }
-        }
-    }//GEN-LAST:event_lstPruebasDisponiblesMouseClicked
-
-    private void lstPruebasAnadidasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstPruebasAnadidasMouseClicked
-        if (evt.getClickCount() == 2) {
-            Prueba pruebaSeleccionada = lstPruebasAnadidas.getSelectedValue();
-
-            if (pruebaSeleccionada != null) {
-                modeloAnadidas.removeElement(pruebaSeleccionada);
-                ordenAlfabeticoListas(modeloDisponibles, pruebaSeleccionada);
-            }
-        }
-    }//GEN-LAST:event_lstPruebasAnadidasMouseClicked
-
-    private void txtBuscarPruebaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarPruebaKeyReleased
-        filtrarPruebas();
-    }//GEN-LAST:event_txtBuscarPruebaKeyReleased
+    }//GEN-LAST:event_btnBuscarMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

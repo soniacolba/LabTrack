@@ -2,6 +2,7 @@ package db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -93,7 +94,7 @@ public class DB {
         st.execute(
                 "CREATE TABLE IF NOT EXISTS peticion_prueba ("
                 + "  id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + "  estado TEXT NOT NULL CHECK (estado IN ('PENDIENTE','REALIZADA','VALIDADA')),"
+                + "  estado TEXT NOT NULL CHECK (estado IN ('PENDIENTE','REALIZADA','VALIDADA', 'ANULADA')),"
                 + "  resultado TEXT,"
                 + "  id_peticion INTEGER NOT NULL,"
                 + "  id_prueba INTEGER NOT NULL,"

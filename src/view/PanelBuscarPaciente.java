@@ -142,6 +142,7 @@ public class PanelBuscarPaciente extends javax.swing.JPanel {
         jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         panelBtnBuscar1.setBackground(new java.awt.Color(75, 113, 167));
+        panelBtnBuscar1.setRequestFocusEnabled(false);
 
         btnBuscar.setBackground(new java.awt.Color(255, 255, 255));
         btnBuscar.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N

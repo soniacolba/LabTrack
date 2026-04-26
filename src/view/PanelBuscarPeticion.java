@@ -38,6 +38,7 @@ import model.EnumEstadoPeticion;
 public class PanelBuscarPeticion extends javax.swing.JPanel {
 
     private JPanel panelPrincipal;
+    private PanelGestionPeticion pnlGestionPeticion;
 
     private DefaultListModel<Prueba> modeloDisponibles = new DefaultListModel<>();
     private DefaultListModel<Prueba> modeloAnadidas = new DefaultListModel<>();
@@ -50,8 +51,9 @@ public class PanelBuscarPeticion extends javax.swing.JPanel {
 
 
 
-    public PanelBuscarPeticion(JPanel panelPrincipal) {
+    public PanelBuscarPeticion(JPanel panelPrincipal, PanelGestionPeticion pnlGestionPeticion) {
         this.panelPrincipal = panelPrincipal;
+        this.pnlGestionPeticion = pnlGestionPeticion;
         initComponents();
         cargarTiposMuestra();
         lstPruebasDisponibles.setModel(modeloDisponibles);
@@ -105,7 +107,6 @@ public class PanelBuscarPeticion extends javax.swing.JPanel {
         btnAgregar.setEnabled(habilitar);
         btnQuitar.setEnabled(habilitar);
         btnGuardar.setEnabled(habilitar);
-        btnAnular.setEnabled(habilitar);
     }
 
     private void filtrarPruebas() {
@@ -197,6 +198,7 @@ public class PanelBuscarPeticion extends javax.swing.JPanel {
 
         boolean editable = peticion.getEstado() == EnumEstadoPeticion.PENDIENTE;
         habilitarDetallesPeticion(editable);
+        btnAnular.setEnabled(peticion.getEstado() == EnumEstadoPeticion.PENDIENTE || peticion.getEstado() == EnumEstadoPeticion.REALIZADA);
 
         txtId.setText(String.valueOf(peticion.getIdPeticion()));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
@@ -244,6 +246,7 @@ public class PanelBuscarPeticion extends javax.swing.JPanel {
     private void initComponents() {
 
         buttonGroupPrioridad = new javax.swing.ButtonGroup();
+        jLabel15 = new javax.swing.JLabel();
         panelSuperior = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         panelCentral = new javax.swing.JPanel();
@@ -254,6 +257,7 @@ public class PanelBuscarPeticion extends javax.swing.JPanel {
         panelBtnBuscar1 = new javax.swing.JPanel();
         btnBuscar1 = new javax.swing.JLabel();
         txtBuscarId = new javax.swing.JTextField();
+        jLabel17 = new javax.swing.JLabel();
         formularioPaciente1 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
@@ -261,6 +265,8 @@ public class PanelBuscarPeticion extends javax.swing.JPanel {
         txtId = new javax.swing.JTextField();
         txtFecha = new javax.swing.JTextField();
         txtEstado = new javax.swing.JTextField();
+        panelBtnAnular1 = new javax.swing.JPanel();
+        btnAnular1 = new javax.swing.JLabel();
         panelBtnAnular = new javax.swing.JPanel();
         btnAnular = new javax.swing.JLabel();
         panelDatosPaciente = new javax.swing.JPanel();
@@ -303,6 +309,8 @@ public class PanelBuscarPeticion extends javax.swing.JPanel {
         panelBtnGuardar = new javax.swing.JPanel();
         btnGuardar = new javax.swing.JLabel();
 
+        jLabel15.setText("jLabel15");
+
         setBackground(new java.awt.Color(255, 255, 255));
         setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20));
         setLayout(new java.awt.BorderLayout());
@@ -318,15 +326,15 @@ public class PanelBuscarPeticion extends javax.swing.JPanel {
 
         panelCentral.setBackground(new java.awt.Color(255, 255, 255));
         panelCentral.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 1, 1, 1));
-        panelCentral.setMinimumSize(new java.awt.Dimension(1008, 601));
-        panelCentral.setPreferredSize(new java.awt.Dimension(1008, 601));
+        panelCentral.setMinimumSize(new java.awt.Dimension(0, 0));
+        panelCentral.setPreferredSize(new java.awt.Dimension(0, 0));
         panelCentral.setLayout(new javax.swing.BoxLayout(panelCentral, javax.swing.BoxLayout.Y_AXIS));
 
         panelBusqueda.setBackground(new java.awt.Color(243, 245, 249));
         panelBusqueda.setMaximumSize(new java.awt.Dimension(2147483647, 280));
-        panelBusqueda.setMinimumSize(new java.awt.Dimension(956, 140));
+        panelBusqueda.setMinimumSize(new java.awt.Dimension(1220, 140));
         panelBusqueda.setName(""); // NOI18N
-        panelBusqueda.setPreferredSize(new java.awt.Dimension(956, 140));
+        panelBusqueda.setPreferredSize(new java.awt.Dimension(1220, 140));
         panelBusqueda.setLayout(new java.awt.BorderLayout());
 
         datosPaciente1.setBackground(new java.awt.Color(215, 232, 247));
@@ -341,6 +349,7 @@ public class PanelBuscarPeticion extends javax.swing.JPanel {
         jPanel7.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
         jPanel7.setMinimumSize(new java.awt.Dimension(1006, 0));
         jPanel7.setOpaque(false);
+        jPanel7.setPreferredSize(new java.awt.Dimension(319, 31));
         jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         panelBtnBuscar1.setBackground(new java.awt.Color(75, 113, 167));
@@ -368,19 +377,23 @@ public class PanelBuscarPeticion extends javax.swing.JPanel {
             .addComponent(btnBuscar1, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
         );
 
-        jPanel7.add(panelBtnBuscar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 0, -1, -1));
+        jPanel7.add(panelBtnBuscar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 0, -1, -1));
 
         txtBuscarId.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        jPanel7.add(txtBuscarId, new org.netbeans.lib.awtextra.AbsoluteConstraints(29, 0, 90, 30));
+        jPanel7.add(txtBuscarId, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 0, 90, 30));
+
+        jLabel17.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jLabel17.setText("Nº petición");
+        jPanel7.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 80, 30));
 
         datosPaciente1.add(jPanel7, java.awt.BorderLayout.LINE_END);
 
         panelBusqueda.add(datosPaciente1, java.awt.BorderLayout.NORTH);
 
-        formularioPaciente1.setMaximumSize(new java.awt.Dimension(1006, 160));
-        formularioPaciente1.setMinimumSize(new java.awt.Dimension(1006, 160));
+        formularioPaciente1.setMaximumSize(new java.awt.Dimension(1206, 160));
+        formularioPaciente1.setMinimumSize(new java.awt.Dimension(1206, 160));
         formularioPaciente1.setOpaque(false);
-        formularioPaciente1.setPreferredSize(new java.awt.Dimension(1006, 160));
+        formularioPaciente1.setPreferredSize(new java.awt.Dimension(1206, 160));
         formularioPaciente1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
@@ -415,6 +428,36 @@ public class PanelBuscarPeticion extends javax.swing.JPanel {
         txtEstado.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         formularioPaciente1.add(txtEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 30, 180, 29));
 
+        panelBtnAnular1.setBackground(new java.awt.Color(75, 113, 167));
+
+        btnAnular1.setBackground(new java.awt.Color(255, 255, 255));
+        btnAnular1.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        btnAnular1.setForeground(new java.awt.Color(255, 255, 255));
+        btnAnular1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnAnular1.setText("Gestionar petición");
+        btnAnular1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnAnular1MouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelBtnAnular1Layout = new javax.swing.GroupLayout(panelBtnAnular1);
+        panelBtnAnular1.setLayout(panelBtnAnular1Layout);
+        panelBtnAnular1Layout.setHorizontalGroup(
+            panelBtnAnular1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 150, Short.MAX_VALUE)
+            .addGroup(panelBtnAnular1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(btnAnular1, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE))
+        );
+        panelBtnAnular1Layout.setVerticalGroup(
+            panelBtnAnular1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 30, Short.MAX_VALUE)
+            .addGroup(panelBtnAnular1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(btnAnular1, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE))
+        );
+
+        formularioPaciente1.add(panelBtnAnular1, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 30, 150, 30));
+
         panelBtnAnular.setBackground(new java.awt.Color(75, 113, 167));
 
         btnAnular.setBackground(new java.awt.Color(255, 255, 255));
@@ -446,10 +489,10 @@ public class PanelBuscarPeticion extends javax.swing.JPanel {
         panelCentral.add(panelBusqueda);
 
         panelDatosPaciente.setBackground(new java.awt.Color(243, 245, 249));
-        panelDatosPaciente.setMaximumSize(new java.awt.Dimension(2147483647, 230));
-        panelDatosPaciente.setMinimumSize(new java.awt.Dimension(1006, 230));
+        panelDatosPaciente.setMaximumSize(new java.awt.Dimension(2147483647, 170));
+        panelDatosPaciente.setMinimumSize(new java.awt.Dimension(0, 0));
         panelDatosPaciente.setName(""); // NOI18N
-        panelDatosPaciente.setPreferredSize(new java.awt.Dimension(956, 230));
+        panelDatosPaciente.setPreferredSize(new java.awt.Dimension(956, 170));
         panelDatosPaciente.setLayout(new java.awt.BorderLayout());
 
         datosPaciente.setBackground(new java.awt.Color(215, 232, 247));
@@ -464,15 +507,15 @@ public class PanelBuscarPeticion extends javax.swing.JPanel {
 
         panelDatosPaciente.add(datosPaciente, java.awt.BorderLayout.NORTH);
 
-        formularioPaciente.setMaximumSize(new java.awt.Dimension(1006, 160));
-        formularioPaciente.setMinimumSize(new java.awt.Dimension(1006, 160));
+        formularioPaciente.setMaximumSize(new java.awt.Dimension(1306, 90));
+        formularioPaciente.setMinimumSize(new java.awt.Dimension(1306, 90));
         formularioPaciente.setOpaque(false);
-        formularioPaciente.setPreferredSize(new java.awt.Dimension(1006, 160));
+        formularioPaciente.setPreferredSize(new java.awt.Dimension(1306, 90));
         formularioPaciente.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel3.setText("CIP");
-        formularioPaciente.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, -1, -1));
+        formularioPaciente.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 30, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel4.setText("Nombre");
@@ -504,15 +547,15 @@ public class PanelBuscarPeticion extends javax.swing.JPanel {
         txtCip.setEditable(false);
         txtCip.setBackground(new java.awt.Color(255, 255, 255));
         txtCip.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        formularioPaciente.add(txtCip, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 336, 29));
+        formularioPaciente.add(txtCip, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 60, 300, 29));
 
         panelDatosPaciente.add(formularioPaciente, java.awt.BorderLayout.LINE_START);
 
         panelCentral.add(panelDatosPaciente);
 
         panelDatosPeticion.setBackground(new java.awt.Color(243, 245, 249));
-        panelDatosPeticion.setMinimumSize(new java.awt.Dimension(1006, 230));
-        panelDatosPeticion.setPreferredSize(new java.awt.Dimension(1006, 230));
+        panelDatosPeticion.setMinimumSize(new java.awt.Dimension(0, 0));
+        panelDatosPeticion.setPreferredSize(new java.awt.Dimension(0, 0));
         panelDatosPeticion.setRequestFocusEnabled(false);
         panelDatosPeticion.setLayout(new java.awt.BorderLayout());
 
@@ -529,10 +572,10 @@ public class PanelBuscarPeticion extends javax.swing.JPanel {
         panelDatosPeticion.add(detallesPeticion, java.awt.BorderLayout.NORTH);
 
         formularioPeticion.setMaximumSize(new java.awt.Dimension(2147483647, 0));
-        formularioPeticion.setMinimumSize(new java.awt.Dimension(0, 0));
+        formularioPeticion.setMinimumSize(new java.awt.Dimension(1006, 480));
         formularioPeticion.setName(""); // NOI18N
         formularioPeticion.setOpaque(false);
-        formularioPeticion.setPreferredSize(new java.awt.Dimension(1006, 0));
+        formularioPeticion.setPreferredSize(new java.awt.Dimension(1006, 480));
         formularioPeticion.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
@@ -1017,7 +1060,7 @@ public class PanelBuscarPeticion extends javax.swing.JPanel {
         return;
     }
 
-    if (peticionActual.getEstado() != EnumEstadoPeticion.PENDIENTE) {
+    if (peticionActual.getEstado() != EnumEstadoPeticion.PENDIENTE && peticionActual.getEstado() != EnumEstadoPeticion.REALIZADA) {
         JOptionPane.showMessageDialog(this,
                 "Solo se pueden anular peticiones en estado PENDIENTE.");
         return;
@@ -1082,13 +1125,27 @@ public class PanelBuscarPeticion extends javax.swing.JPanel {
                 e.printStackTrace();
             }
         }
-    }
+        }
     }//GEN-LAST:event_btnAnularMouseClicked
+
+    private void btnAnular1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAnular1MouseClicked
+        if (peticionActual == null) {
+            JOptionPane.showMessageDialog(this, "Primero debes buscar una petición.");
+            return;
+        }
+
+        pnlGestionPeticion.cargarPeticion(peticionActual.getIdPeticion());
+
+        CardLayout cl = (CardLayout) panelPrincipal.getLayout();
+        cl.show(panelPrincipal, "Gestion peticion");
+        limpiarFormulario();
+    }//GEN-LAST:event_btnAnular1MouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btnAgregar;
     private javax.swing.JLabel btnAnular;
+    private javax.swing.JLabel btnAnular1;
     private javax.swing.JLabel btnBuscar1;
     private javax.swing.JLabel btnCancelar;
     private javax.swing.JLabel btnGuardar;
@@ -1108,7 +1165,9 @@ public class PanelBuscarPeticion extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1125,6 +1184,7 @@ public class PanelBuscarPeticion extends javax.swing.JPanel {
     private javax.swing.JList<Prueba> lstPruebasDisponibles;
     private javax.swing.JPanel panelBtnAgregar;
     private javax.swing.JPanel panelBtnAnular;
+    private javax.swing.JPanel panelBtnAnular1;
     private javax.swing.JPanel panelBtnBuscar1;
     private javax.swing.JPanel panelBtnCancelar;
     private javax.swing.JPanel panelBtnGuardar;

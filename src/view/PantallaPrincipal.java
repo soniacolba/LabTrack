@@ -18,26 +18,36 @@ import javax.swing.border.Border;
 public final class PantallaPrincipal extends javax.swing.JFrame {
 
     private CardLayout cardLayout;
+    PanelPendientesResultados pnlPendResultados;
+    PanelPendientesValidacion pnlPendValidacion;
 
     public PantallaPrincipal() {
         initComponents();
-        setSize(1500, 1200);
+        setSize(1600, 1200);
         setLocationRelativeTo(null);
 
         cardLayout = new CardLayout();
         panelPrincipal.setLayout(cardLayout);
-
+          
         PanelInicio menuInicio = new PanelInicio(panelPrincipal);
         PanelNuevaPeticion pnlNuevaPeticion = new PanelNuevaPeticion(panelPrincipal);
-        PanelBuscarPeticion pnlBuscarPeticion = new PanelBuscarPeticion(panelPrincipal);
+        PanelGestionPeticion pnlGestionPeticion = new PanelGestionPeticion(panelPrincipal);
+        PanelBuscarPeticion pnlBuscarPeticion = new PanelBuscarPeticion(panelPrincipal, pnlGestionPeticion);
         PanelBuscarPaciente pnlBuscarPaciente = new PanelBuscarPaciente(panelPrincipal);
-        PanelHistoricoPaciente pnlHistoricoPaciente = new PanelHistoricoPaciente(panelPrincipal);
+        PanelHistoricoPaciente pnlHistoricoPaciente = new PanelHistoricoPaciente(panelPrincipal, pnlGestionPeticion);
+        pnlPendResultados = new PanelPendientesResultados(panelPrincipal, pnlGestionPeticion);
+        pnlPendValidacion = new PanelPendientesValidacion(panelPrincipal, pnlGestionPeticion);
+        PanelInformesPeticion pnlInformesPeticion = new PanelInformesPeticion(panelPrincipal);
         
         panelPrincipal.add(menuInicio, "Pantalla Inicio");
         panelPrincipal.add(pnlNuevaPeticion, "Nueva Peticion");
         panelPrincipal.add(pnlBuscarPeticion, "Buscar Peticion");
         panelPrincipal.add(pnlBuscarPaciente, "Buscar Paciente");
         panelPrincipal.add(pnlHistoricoPaciente, "Historico paciente");
+        panelPrincipal.add(pnlGestionPeticion, "Gestion peticion");
+        panelPrincipal.add(pnlPendResultados, "Pendiente Resultados");
+        panelPrincipal.add(pnlPendValidacion, "Pendiente Validacion");
+        panelPrincipal.add(pnlInformesPeticion, "Informes");
 
         aplicarHover(btnNuevaPeticion);
         aplicarHover(btnBuscarPeticion);
@@ -93,6 +103,8 @@ public final class PantallaPrincipal extends javax.swing.JFrame {
         barraSuperior = new javax.swing.JPanel();
         lblLabTrack = new javax.swing.JLabel();
         lblUsuario = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        pnlCentro = new javax.swing.JPanel();
         menuLateral = new javax.swing.JPanel();
         menuPeticiones = new javax.swing.JPanel();
         lblPeticiones = new javax.swing.JLabel();
@@ -138,10 +150,14 @@ public final class PantallaPrincipal extends javax.swing.JFrame {
         lblUsuario.setPreferredSize(new java.awt.Dimension(300, 14));
         barraSuperior.add(lblUsuario, java.awt.BorderLayout.LINE_END);
 
-        fondo.add(barraSuperior, java.awt.BorderLayout.PAGE_START);
+        fondo.add(barraSuperior, java.awt.BorderLayout.NORTH);
+
+        pnlCentro.setMinimumSize(new java.awt.Dimension(220, 850));
+        pnlCentro.setPreferredSize(new java.awt.Dimension(220, 850));
+        pnlCentro.setLayout(new java.awt.BorderLayout());
 
         menuLateral.setBackground(new java.awt.Color(243, 245, 249));
-        menuLateral.setMaximumSize(new java.awt.Dimension(2147483647, 560));
+        menuLateral.setMaximumSize(new java.awt.Dimension(2147483647, 640));
         menuLateral.setPreferredSize(new java.awt.Dimension(220, 640));
         menuLateral.setLayout(new javax.swing.BoxLayout(menuLateral, javax.swing.BoxLayout.Y_AXIS));
 
@@ -296,7 +312,7 @@ public final class PantallaPrincipal extends javax.swing.JFrame {
 
         btnInformePeticion.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         btnInformePeticion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/informes.png"))); // NOI18N
-        btnInformePeticion.setText("Informe por petición");
+        btnInformePeticion.setText("<html>Informes por <br>petición</html>");
         btnInformePeticion.setBorderPainted(false);
         btnInformePeticion.setContentAreaFilled(false);
         btnInformePeticion.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -309,11 +325,18 @@ public final class PantallaPrincipal extends javax.swing.JFrame {
 
         menuLateral.add(menuInformes);
 
-        fondo.add(menuLateral, java.awt.BorderLayout.LINE_START);
+        pnlCentro.add(menuLateral, java.awt.BorderLayout.WEST);
 
         panelPrincipal.setBackground(new java.awt.Color(255, 255, 255));
+        panelPrincipal.setMaximumSize(new java.awt.Dimension(2147483647, 700));
+        panelPrincipal.setMinimumSize(new java.awt.Dimension(0, 700));
+        panelPrincipal.setPreferredSize(new java.awt.Dimension(0, 700));
         panelPrincipal.setLayout(new java.awt.CardLayout());
-        fondo.add(panelPrincipal, java.awt.BorderLayout.CENTER);
+        pnlCentro.add(panelPrincipal, java.awt.BorderLayout.CENTER);
+
+        jScrollPane1.setViewportView(pnlCentro);
+
+        fondo.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -323,14 +346,15 @@ public final class PantallaPrincipal extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(fondo, javax.swing.GroupLayout.DEFAULT_SIZE, 749, Short.MAX_VALUE)
+            .addComponent(fondo, javax.swing.GroupLayout.DEFAULT_SIZE, 849, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPendienteValidacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPendienteValidacionActionPerformed
-        // TODO add your handling code here:
+        pnlPendValidacion.cargarPendientes();
+        cardLayout.show(panelPrincipal, "Pendiente Validacion");
     }//GEN-LAST:event_btnPendienteValidacionActionPerformed
 
     private void btnNuevaPeticionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaPeticionActionPerformed
@@ -338,7 +362,8 @@ public final class PantallaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNuevaPeticionActionPerformed
 
     private void btnPendienteResultadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPendienteResultadosActionPerformed
-        // TODO add your handling code here:
+        pnlPendResultados.cargarPendientes();
+        cardLayout.show(panelPrincipal, "Pendiente Resultados");
     }//GEN-LAST:event_btnPendienteResultadosActionPerformed
 
     private void btnBuscarPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarPacienteActionPerformed
@@ -350,7 +375,7 @@ public final class PantallaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnHistoricoPacienteActionPerformed
 
     private void btnInformePeticionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInformePeticionActionPerformed
-        // TODO add your handling code here:
+        cardLayout.show(panelPrincipal, "Informes");
     }//GEN-LAST:event_btnInformePeticionActionPerformed
 
     private void btnRegistrarPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarPacienteActionPerformed
@@ -410,6 +435,7 @@ public final class PantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnPendienteValidacion;
     private javax.swing.JButton btnRegistrarPaciente;
     private javax.swing.JPanel fondo;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblInformes;
     private javax.swing.JLabel lblLabTrack;
     private javax.swing.JLabel lblPacientes;
@@ -420,5 +446,6 @@ public final class PantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel menuPacientes;
     private javax.swing.JPanel menuPeticiones;
     private javax.swing.JPanel panelPrincipal;
+    private javax.swing.JPanel pnlCentro;
     // End of variables declaration//GEN-END:variables
 }

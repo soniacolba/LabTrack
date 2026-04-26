@@ -7,29 +7,18 @@ package view;
 
 
 import dao.PeticionDAO;
-import dao.PeticionPruebaDAO;
-import dao.PruebaDAO;
 import dao.TipoMuestraDAO;
-import db.DB;
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.sql.Connection;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
-import model.EnumEstadoPeticion;
-import model.EnumEstadoPeticionPrueba;
-import model.EnumPrioridad;
 import model.Paciente;
 import model.Peticion;
-import model.PeticionPrueba;
-import model.Prueba;
 import model.TipoMuestra;
 
 
@@ -40,11 +29,13 @@ import model.TipoMuestra;
 public class PanelHistoricoPaciente extends javax.swing.JPanel {
 
     private JPanel panelPrincipal;
+    private PanelGestionPeticion pnlGestionPeticion;
     private Map<Integer, String> mapaTiposMuestra = new HashMap<>();
    
 
-    public PanelHistoricoPaciente(JPanel panelPrincipal) {
+    public PanelHistoricoPaciente(JPanel panelPrincipal, PanelGestionPeticion pnlGestionPeticion) {
         this.panelPrincipal = panelPrincipal;
+        this.pnlGestionPeticion = pnlGestionPeticion;
         initComponents();
         personalizarTabla();
         cargarMapaTiposMuestra();
@@ -140,8 +131,8 @@ public class PanelHistoricoPaciente extends javax.swing.JPanel {
         panelInferior = new javax.swing.JPanel();
         panelBtnCancelar = new javax.swing.JPanel();
         btnCancelar = new javax.swing.JLabel();
-        panelBtnCrear = new javax.swing.JPanel();
-        btnAceptar = new javax.swing.JLabel();
+        panelBtnAbrir = new javax.swing.JPanel();
+        btnAbrir = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -272,17 +263,21 @@ public class PanelHistoricoPaciente extends javax.swing.JPanel {
 
         panelDatosPeticion.add(detallesPeticion, java.awt.BorderLayout.NORTH);
 
+        jScrollPane3.setBackground(new java.awt.Color(255, 255, 255));
+
         tblPeticiones.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
                 "Nº Petición", "Fecha", "Estado", "Prioridad", "Tipo de muestra"
             }
         ));
+        tblPeticiones.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblPeticionesMouseClicked(evt);
+            }
+        });
         jScrollPane3.setViewportView(tblPeticiones);
 
         panelDatosPeticion.add(jScrollPane3, java.awt.BorderLayout.CENTER);
@@ -324,35 +319,35 @@ public class PanelHistoricoPaciente extends javax.swing.JPanel {
 
         panelInferior.add(panelBtnCancelar);
 
-        panelBtnCrear.setBackground(new java.awt.Color(75, 113, 167));
+        panelBtnAbrir.setBackground(new java.awt.Color(75, 113, 167));
 
-        btnAceptar.setBackground(new java.awt.Color(255, 255, 255));
-        btnAceptar.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        btnAceptar.setForeground(new java.awt.Color(255, 255, 255));
-        btnAceptar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        btnAceptar.setText("Abrir");
-        btnAceptar.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnAbrir.setBackground(new java.awt.Color(255, 255, 255));
+        btnAbrir.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        btnAbrir.setForeground(new java.awt.Color(255, 255, 255));
+        btnAbrir.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnAbrir.setText("Abrir");
+        btnAbrir.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnAceptarMouseClicked(evt);
+                btnAbrirMouseClicked(evt);
             }
         });
 
-        javax.swing.GroupLayout panelBtnCrearLayout = new javax.swing.GroupLayout(panelBtnCrear);
-        panelBtnCrear.setLayout(panelBtnCrearLayout);
-        panelBtnCrearLayout.setHorizontalGroup(
-            panelBtnCrearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBtnCrearLayout.createSequentialGroup()
+        javax.swing.GroupLayout panelBtnAbrirLayout = new javax.swing.GroupLayout(panelBtnAbrir);
+        panelBtnAbrir.setLayout(panelBtnAbrirLayout);
+        panelBtnAbrirLayout.setHorizontalGroup(
+            panelBtnAbrirLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBtnAbrirLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btnAbrir, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
-        panelBtnCrearLayout.setVerticalGroup(
-            panelBtnCrearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBtnCrearLayout.createSequentialGroup()
+        panelBtnAbrirLayout.setVerticalGroup(
+            panelBtnAbrirLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBtnAbrirLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btnAbrir, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        panelInferior.add(panelBtnCrear);
+        panelInferior.add(panelBtnAbrir);
 
         add(panelInferior, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
@@ -376,7 +371,8 @@ public class PanelHistoricoPaciente extends javax.swing.JPanel {
 
     }//GEN-LAST:event_btnBuscarMouseClicked
 
-    private void btnAceptarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAceptarMouseClicked
+    private void btnAbrirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAbrirMouseClicked
+        
         int fila = tblPeticiones.getSelectedRow();
 
         if (fila == -1) {
@@ -384,29 +380,15 @@ public class PanelHistoricoPaciente extends javax.swing.JPanel {
             return;
         }
 
-        int idPeticion = (int) tblPeticiones.getValueAt(fila, 0);
-        String estadoTexto = tblPeticiones.getValueAt(fila, 2).toString();
-        EnumEstadoPeticion estado = EnumEstadoPeticion.valueOf(estadoTexto);
+        int idPeticion = Integer.parseInt(tblPeticiones.getValueAt(fila, 0).toString());
+        
+        pnlGestionPeticion.cargarPeticion(idPeticion);
 
-        switch (estado) {
-            case PENDIENTE:
-                // abrir panel MeterResultados
-                break;
+        CardLayout cl = (CardLayout) panelPrincipal.getLayout();
+        cl.show(panelPrincipal, "Gestion peticion");
+        limpiarFormulario();
 
-            case REALIZADA:
-                // abrir panel Validar
-                break;
-
-            case VALIDADA:
-                // abrir panel Informar
-                break;
-
-            case ANULADA:
-            case INFORMADA:
-                // abrir panel BuscarPeticion en modo visualización
-                break;
-        }
-    }//GEN-LAST:event_btnAceptarMouseClicked
+    }//GEN-LAST:event_btnAbrirMouseClicked
 
     private void btnCancelarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCancelarMouseClicked
 
@@ -416,9 +398,24 @@ public class PanelHistoricoPaciente extends javax.swing.JPanel {
         cl.show(panelPrincipal, "Pantalla Inicio");
     }//GEN-LAST:event_btnCancelarMouseClicked
 
+    private void tblPeticionesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPeticionesMouseClicked
+        if (evt.getClickCount() == 2) {
+            int fila = tblPeticiones.getSelectedRow();
+
+            if (fila != -1) {
+                int idPeticion = Integer.parseInt(tblPeticiones.getValueAt(fila, 0).toString());
+
+                pnlGestionPeticion.cargarPeticion(idPeticion);
+
+                CardLayout cl = (CardLayout) panelPrincipal.getLayout();
+                cl.show(panelPrincipal, "Gestion peticion");
+            }
+        }
+    }//GEN-LAST:event_tblPeticionesMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel btnAceptar;
+    private javax.swing.JLabel btnAbrir;
     private javax.swing.JLabel btnBuscar;
     private javax.swing.JLabel btnCancelar;
     private javax.swing.ButtonGroup buttonGroupPrioridad;
@@ -434,9 +431,9 @@ public class PanelHistoricoPaciente extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JPanel panelBtnAbrir;
     private javax.swing.JPanel panelBtnBuscar;
     private javax.swing.JPanel panelBtnCancelar;
-    private javax.swing.JPanel panelBtnCrear;
     private javax.swing.JPanel panelCentral;
     private javax.swing.JPanel panelDatosPaciente;
     private javax.swing.JPanel panelDatosPeticion;

@@ -37,8 +37,31 @@ public class PruebaDAO {
         }
         
         return lista;
-        
-        
     }
     
+    public Prueba buscarPorId(int id) {
+
+        String sql = "SELECT id_prueba, nombre FROM prueba WHERE id_prueba = ?";
+
+        try (Connection con = DB.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Prueba(
+                            rs.getInt("id_prueba"),
+                            rs.getString("nombre")
+                    );
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 }

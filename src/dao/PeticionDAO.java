@@ -160,4 +160,40 @@ public class PeticionDAO {
 
         return lista;
     }
+
+    public List<Peticion> listarPorEstado(EnumEstadoPeticion estado) {
+
+        List<Peticion> lista = new ArrayList<>();
+
+        String sql = "SELECT id_peticion, fecha_registro, prioridad, estado, cip_paciente, id_usuario, id_tipo_muestra "
+                + "FROM peticion WHERE estado = ? ORDER BY fecha_registro DESC";
+
+        try (Connection con = DB.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, estado.name());
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Peticion p = new Peticion(
+                            rs.getInt("id_peticion"),
+                            LocalDateTime.parse(rs.getString("fecha_registro")),
+                            EnumPrioridad.valueOf(rs.getString("prioridad")),
+                            EnumEstadoPeticion.valueOf(rs.getString("estado")),
+                            rs.getString("cip_paciente"),
+                            rs.getInt("id_usuario"),
+                            rs.getInt("id_tipo_muestra")
+                    );
+                    lista.add(p);
+
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return lista;
+
+    }
+
 }

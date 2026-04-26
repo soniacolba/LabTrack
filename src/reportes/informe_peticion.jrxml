@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="informe_peticion" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2e7fffb1-80ee-44f1-9b1f-97aa127beec1">
+	<property name="ireport.zoom" value="1.948717100000002"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="net.sf.jasperreports.default.pdf.encoding" value="UTF-8"/>
+	<parameter name="idPeticion" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT
+    pe.id_peticion,
+    pe.fecha_registro,
+    pe.estado,
+    pe.prioridad,
+
+    pa.cip,
+    pa.nombre AS nombre_paciente,
+    pa.apellidos,
+    pa.fecha_nacimiento,
+
+    tm.nombre AS tipo_muestra,
+
+    pr.nombre AS prueba,
+    pp.resultado,
+    pp.estado AS estado_prueba
+
+FROM peticion pe
+JOIN paciente pa ON pe.cip_paciente = pa.cip
+JOIN tipo_muestra tm ON pe.id_tipo_muestra = tm.id_tipo_muestra
+JOIN peticion_prueba pp ON pe.id_peticion = pp.id_peticion
+JOIN prueba pr ON pp.id_prueba = pr.id_prueba
+
+WHERE pe.id_peticion = $P{idPeticion}
+ORDER BY pr.nombre]]>
+	</queryString>
+	<field name="id_peticion" class="java.lang.Object"/>
+	<field name="fecha_registro" class="java.lang.Object"/>
+	<field name="estado" class="java.lang.Object"/>
+	<field name="prioridad" class="java.lang.Object"/>
+	<field name="cip" class="java.lang.Object"/>
+	<field name="nombre_paciente" class="java.lang.Object"/>
+	<field name="apellidos" class="java.lang.Object"/>
+	<field name="fecha_nacimiento" class="java.lang.Object"/>
+	<field name="tipo_muestra" class="java.lang.Object"/>
+	<field name="prueba" class="java.lang.Object"/>
+	<field name="resultado" class="java.lang.Object"/>
+	<field name="estado_prueba" class="java.lang.Object"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="134" splitType="Stretch">
+			<rectangle>
+				<reportElement x="222" y="0" width="333" height="113" uuid="28a6d45b-0ee8-4c0e-bf76-3872e914f3cc"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="0" width="200" height="27" uuid="b3698ec0-642f-4f17-8fd7-c9a9133cd004"/>
+				<textElement>
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[Informe de laboratorio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="27" width="100" height="20" uuid="f7ef6fa9-52cf-4cb3-8161-14e275091e47"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[LabTrack]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="240" y="48" width="216" height="20" uuid="2c02b04f-a78b-432a-a949-6fbd8b4f4422"/>
+				<textFieldExpression><![CDATA["Apellidos: "+$F{apellidos}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="240" y="28" width="168" height="20" uuid="48d0c08d-7dfa-47b0-b827-890271a7ce64"/>
+				<textFieldExpression><![CDATA["Nombre: "+$F{nombre_paciente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="240" y="68" width="200" height="20" uuid="3bb0cb2a-4a83-4a37-b34a-e19cd8875390"/>
+				<textFieldExpression><![CDATA["Fecha de nacimiento: " +
+new java.text.SimpleDateFormat("dd/MM/yyyy").format(
+    new java.text.SimpleDateFormat("yyyy-MM-dd").parse($F{fecha_nacimiento}.toString())
+)]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="240" y="88" width="200" height="20" uuid="2df49eb5-a5b7-49c1-9d7b-20228e227599"/>
+				<textFieldExpression><![CDATA["CIP: "+$F{cip}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="240" y="7" width="100" height="20" uuid="bede9b18-8f0b-4c4a-b686-3e6db36a8686"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Datos del paciente]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="108" width="159" height="20" uuid="414e0c75-5f65-4fce-a8aa-1408ce1e4fec"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estado}.toString().equals("INFORMADA")
+|| $F{estado}.toString().equals("ANULADA")
+? "INFORME FINAL"
+: "INFORME PRELIMINAR"]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="112" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="112" uuid="a317a1a1-ad81-4034-b783-a2d086c6ddc2"/>
+			</rectangle>
+			<textField>
+				<reportElement x="84" y="40" width="84" height="20" uuid="3e22d5e3-8679-48d3-9e16-93d0e0f9b2de"/>
+				<textFieldExpression><![CDATA[$F{id_peticion}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy HH:mm">
+				<reportElement x="16" y="20" width="206" height="20" uuid="ba8d7590-8f81-42f7-b9e0-50a1ed25d4c1"/>
+				<textFieldExpression><![CDATA["Fecha Solicitud: " +
+new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(
+    new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").parse($F{fecha_registro}.toString())
+)]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="308" y="40" width="100" height="20" uuid="f2de6075-2aed-4e3d-b988-8dd89048df1f"/>
+				<textFieldExpression><![CDATA["Prioridad: "+$F{prioridad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="308" y="20" width="209" height="20" uuid="47f4860d-2ee5-428b-bf8e-609705a656aa"/>
+				<textFieldExpression><![CDATA["Estado de la orden: "+$F{estado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="16" y="70" width="243" height="20" uuid="4dea8cdc-1233-4700-b470-adc7eef4c0cc"/>
+				<textFieldExpression><![CDATA["Tipo de muestra: "+$F{tipo_muestra}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="16" y="40" width="68" height="20" uuid="46200c0f-3531-4335-9c0a-9f2280b928f7"/>
+				<text><![CDATA[Nº de petición:]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="58" splitType="Stretch">
+			<staticText>
+				<reportElement x="16" y="28" width="100" height="20" uuid="6a1d700e-a76e-471c-ac09-b47f32d4d238"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Prueba]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="308" y="28" width="100" height="20" uuid="68517546-9ad9-47a2-bc00-000b9b8023e0"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Resultado]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="48" width="555" height="1" uuid="389ed484-2968-445a-9761-768ffc61f916"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="16" y="0" width="100" height="20" uuid="1fe87c08-e4f1-4518-ba24-e330f66c5eb5"/>
+				<textFieldExpression><![CDATA[""+$F{prueba}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="308" y="0" width="247" height="20" uuid="6281c32b-b2e9-47af-86ae-5093d906ba41"/>
+				<textFieldExpression><![CDATA[$F{resultado} == null || $F{resultado}.toString().trim().isEmpty()
+? "Pendiente"
+: $F{resultado}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="43" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="18" width="136" height="20" uuid="ba818d38-b31b-41f1-95f8-5717dae0e60c"/>
+				<textFieldExpression><![CDATA["Fecha: " + new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="503" y="18" width="52" height="20" uuid="a27fb303-a1d8-4395-8414-bfea002ef6ac"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER} + "/" + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="3" width="555" height="2" uuid="03b51bda-5178-4eec-8ecd-571671a2a586"/>
+			</line>
+			<textField>
+				<reportElement x="376" y="18" width="84" height="20" uuid="6391c7c7-cd09-4565-a635-4e73c1e6c2c7"/>
+				<textFieldExpression><![CDATA[$F{id_peticion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="308" y="18" width="68" height="20" uuid="40bea589-6406-4f8d-9d91-dc92c655191e"/>
+				<text><![CDATA[Nº de petición:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="468" y="18" width="35" height="20" uuid="08015049-1d9a-4dd0-9288-9a3c0f8c55a8"/>
+				<text><![CDATA[Página]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="159" y="18" width="119" height="20" uuid="7546c03d-74a8-44ee-80e1-9ede108636b1"/>
+				<textFieldExpression><![CDATA[$F{estado}.toString().equals("INFORMADA")
+|| $F{estado}.toString().equals("ANULADA")
+? "INFORME FINAL"
+: "INFORME PRELIMINAR"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>
