@@ -8,6 +8,7 @@ package view;
 
 import dao.PacienteDAO;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.time.LocalDate;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -140,6 +141,9 @@ public class DialogoBuscarPaciente extends javax.swing.JDialog {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnBuscarMouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnBuscarMouseEntered(evt);
+            }
         });
 
         javax.swing.GroupLayout panelBtnBuscarLayout = new javax.swing.GroupLayout(panelBtnBuscar);
@@ -203,6 +207,9 @@ public class DialogoBuscarPaciente extends javax.swing.JDialog {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnAceptarMouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnAceptarMouseEntered(evt);
+            }
         });
 
         javax.swing.GroupLayout panelBtnAceptarLayout = new javax.swing.GroupLayout(panelBtnAceptar);
@@ -232,6 +239,9 @@ public class DialogoBuscarPaciente extends javax.swing.JDialog {
         btnCancelar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnCancelarMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnCancelarMouseEntered(evt);
             }
         });
 
@@ -310,6 +320,18 @@ public class DialogoBuscarPaciente extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "Introduce CIP o apellidos");
         }
     }//GEN-LAST:event_btnBuscarMouseClicked
+
+    private void btnBuscarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBuscarMouseEntered
+        btnBuscar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_btnBuscarMouseEntered
+
+    private void btnCancelarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCancelarMouseEntered
+        btnCancelar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_btnCancelarMouseEntered
+
+    private void btnAceptarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAceptarMouseEntered
+        btnAceptar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_btnAceptarMouseEntered
 
     private void buscarPorCip(String cip) {
         PacienteDAO dao = new PacienteDAO();

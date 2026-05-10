@@ -15,6 +15,7 @@ import dao.TipoMuestraDAO;
 import db.DB;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.sql.Connection;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -51,13 +52,11 @@ public class PanelBuscarPaciente extends javax.swing.JPanel {
 
         panelFecha.setLayout(new java.awt.BorderLayout());
         panelFecha.add(datePickerFecha, java.awt.BorderLayout.CENTER);
+        btnGuardar.setEnabled(false);
 
     }
     
-    private void limpiarFormulario() {
-        
-
-        
+    public void limpiarFormulario() {
         txtCip.setText("");
         txtNombre.setText("");
         txtApellidos.setText("");
@@ -154,6 +153,9 @@ public class PanelBuscarPaciente extends javax.swing.JPanel {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnBuscarMouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnBuscarMouseEntered(evt);
+            }
         });
 
         javax.swing.GroupLayout panelBtnBuscar1Layout = new javax.swing.GroupLayout(panelBtnBuscar1);
@@ -240,6 +242,9 @@ public class PanelBuscarPaciente extends javax.swing.JPanel {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnCancelarMouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnCancelarMouseEntered(evt);
+            }
         });
 
         javax.swing.GroupLayout panelBtnCancelarLayout = new javax.swing.GroupLayout(panelBtnCancelar);
@@ -270,6 +275,9 @@ public class PanelBuscarPaciente extends javax.swing.JPanel {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnGuardarMouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnGuardarMouseEntered(evt);
+            }
         });
 
         javax.swing.GroupLayout panelBtnGuardarLayout = new javax.swing.GroupLayout(panelBtnGuardar);
@@ -293,6 +301,10 @@ public class PanelBuscarPaciente extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGuardarMouseClicked
+        if(!btnGuardar.isEnabled()){
+            return;
+        }
+        
         Paciente p = new Paciente(
                 txtCip.getText().trim(),
                 txtNombre.getText().trim(),
@@ -330,9 +342,21 @@ public class PanelBuscarPaciente extends javax.swing.JPanel {
             datePickerFecha.setText(p.getFechaNacimiento().format(formatter));
             txtCip.setText(p.getCip());
             txtCip.setEnabled(false);
-
+            btnGuardar.setEnabled(true);
         }
     }//GEN-LAST:event_btnBuscarMouseClicked
+
+    private void btnBuscarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBuscarMouseEntered
+        btnBuscar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_btnBuscarMouseEntered
+
+    private void btnGuardarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGuardarMouseEntered
+        btnGuardar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_btnGuardarMouseEntered
+
+    private void btnCancelarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCancelarMouseEntered
+        btnCancelar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_btnCancelarMouseEntered
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

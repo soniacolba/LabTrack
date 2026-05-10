@@ -9,7 +9,6 @@ public class Peticion {
     private LocalDateTime fechaRegistro;
     private EnumPrioridad prioridad;
     private EnumEstadoPeticion estado;
-    
     private String cipPaciente;
     private int idUsuario;
     private int idTipoMuestra;

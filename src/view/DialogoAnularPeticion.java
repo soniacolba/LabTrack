@@ -5,6 +5,8 @@
  */
 package view;
 
+import java.awt.Cursor;
+
 /**
  *
  * @author leia6
@@ -33,77 +35,51 @@ public class DialogoAnularPeticion extends javax.swing.JDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        datosPaciente = new javax.swing.JPanel();
+        motivoAnulacion = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         panelInferior = new javax.swing.JPanel();
-        panelBtnAceptar = new javax.swing.JPanel();
-        btnAceptar = new javax.swing.JLabel();
         panelBtnCancelar = new javax.swing.JPanel();
         btnCancelar = new javax.swing.JLabel();
+        panelBtnAceptar = new javax.swing.JPanel();
+        btnAceptar = new javax.swing.JLabel();
         cmbMotivo = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(530, 260));
         setResizable(false);
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setBackground(new java.awt.Color(243, 245, 249));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        datosPaciente.setBackground(new java.awt.Color(215, 232, 247));
-        datosPaciente.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        datosPaciente.setMinimumSize(new java.awt.Dimension(124, 70));
-        datosPaciente.setLayout(new java.awt.BorderLayout());
+        motivoAnulacion.setBackground(new java.awt.Color(215, 232, 247));
+        motivoAnulacion.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        motivoAnulacion.setMinimumSize(new java.awt.Dimension(124, 70));
+        motivoAnulacion.setLayout(new java.awt.BorderLayout());
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel2.setText("Motivo de la anulación");
-        datosPaciente.add(jLabel2, java.awt.BorderLayout.WEST);
+        motivoAnulacion.add(jLabel2, java.awt.BorderLayout.WEST);
 
-        jPanel1.add(datosPaciente, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 540, -1));
+        jPanel1.add(motivoAnulacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 540, -1));
 
+        panelInferior.setBackground(new java.awt.Color(255, 255, 255));
         panelInferior.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 20));
         panelInferior.setMinimumSize(new java.awt.Dimension(150, 53));
         panelInferior.setPreferredSize(new java.awt.Dimension(150, 53));
+        panelInferior.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        panelBtnAceptar.setBackground(new java.awt.Color(75, 113, 167));
-
-        btnAceptar.setBackground(new java.awt.Color(255, 255, 255));
-        btnAceptar.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        btnAceptar.setForeground(new java.awt.Color(255, 255, 255));
-        btnAceptar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        btnAceptar.setText("Aceptar");
-        btnAceptar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnAceptarMouseClicked(evt);
-            }
-        });
-
-        javax.swing.GroupLayout panelBtnAceptarLayout = new javax.swing.GroupLayout(panelBtnAceptar);
-        panelBtnAceptar.setLayout(panelBtnAceptarLayout);
-        panelBtnAceptarLayout.setHorizontalGroup(
-            panelBtnAceptarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBtnAceptarLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        panelBtnAceptarLayout.setVerticalGroup(
-            panelBtnAceptarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBtnAceptarLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-
-        panelInferior.add(panelBtnAceptar);
-
-        panelBtnCancelar.setBackground(new java.awt.Color(75, 113, 167));
+        panelBtnCancelar.setBackground(new java.awt.Color(243, 245, 249));
 
         btnCancelar.setBackground(new java.awt.Color(255, 255, 255));
         btnCancelar.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        btnCancelar.setForeground(new java.awt.Color(255, 255, 255));
         btnCancelar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         btnCancelar.setText("Cancelar");
         btnCancelar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnCancelarMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnCancelarMouseEntered(evt);
             }
         });
 
@@ -122,13 +98,46 @@ public class DialogoAnularPeticion extends javax.swing.JDialog {
                 .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        panelInferior.add(panelBtnCancelar);
+        panelInferior.add(panelBtnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 20, -1, -1));
 
-        jPanel1.add(panelInferior, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 170, 540, 60));
+        panelBtnAceptar.setBackground(new java.awt.Color(75, 113, 167));
+
+        btnAceptar.setBackground(new java.awt.Color(255, 255, 255));
+        btnAceptar.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        btnAceptar.setForeground(new java.awt.Color(255, 255, 255));
+        btnAceptar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnAceptar.setText("Aceptar");
+        btnAceptar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnAceptarMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnAceptarMouseEntered(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelBtnAceptarLayout = new javax.swing.GroupLayout(panelBtnAceptar);
+        panelBtnAceptar.setLayout(panelBtnAceptarLayout);
+        panelBtnAceptarLayout.setHorizontalGroup(
+            panelBtnAceptarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBtnAceptarLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        panelBtnAceptarLayout.setVerticalGroup(
+            panelBtnAceptarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBtnAceptarLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        panelInferior.add(panelBtnAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 20, -1, -1));
+
+        jPanel1.add(panelInferior, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 160, 540, 80));
 
         cmbMotivo.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         cmbMotivo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Muestra insuficiente", "Petición errónea", "Muestra contaminada", "Muestra inadecuada", "Tubo mal identificado", "Muestra hemolizada" }));
-        jPanel1.add(cmbMotivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 370, 40));
+        jPanel1.add(cmbMotivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 460, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -154,14 +163,22 @@ public class DialogoAnularPeticion extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_btnCancelarMouseClicked
 
+    private void btnAceptarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAceptarMouseEntered
+        btnAceptar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_btnAceptarMouseEntered
+
+    private void btnCancelarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCancelarMouseEntered
+        btnCancelar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_btnCancelarMouseEntered
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btnAceptar;
     private javax.swing.JLabel btnCancelar;
     private javax.swing.JComboBox<String> cmbMotivo;
-    private javax.swing.JPanel datosPaciente;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel motivoAnulacion;
     private javax.swing.JPanel panelBtnAceptar;
     private javax.swing.JPanel panelBtnCancelar;
     private javax.swing.JPanel panelInferior;

@@ -11,6 +11,7 @@ import dao.PeticionDAO;
 import dao.TipoMuestraDAO;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
@@ -177,6 +178,9 @@ public class PanelPendientesValidacion extends javax.swing.JPanel {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnCancelarMouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnCancelarMouseEntered(evt);
+            }
         });
 
         javax.swing.GroupLayout panelBtnCancelarLayout = new javax.swing.GroupLayout(panelBtnCancelar);
@@ -207,6 +211,9 @@ public class PanelPendientesValidacion extends javax.swing.JPanel {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnAbrirMouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnAbrirMouseEntered(evt);
+            }
         });
 
         javax.swing.GroupLayout panelBtnAbrirLayout = new javax.swing.GroupLayout(panelBtnAbrir);
@@ -230,7 +237,7 @@ public class PanelPendientesValidacion extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAbrirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAbrirMouseClicked
-        
+
         int fila = tblPendientes.getSelectedRow();
 
         if (fila == -1) {
@@ -270,6 +277,14 @@ public class PanelPendientesValidacion extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_tblPendientesMouseClicked
+
+    private void btnAbrirMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAbrirMouseEntered
+        btnAbrir.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_btnAbrirMouseEntered
+
+    private void btnCancelarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCancelarMouseEntered
+        btnCancelar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_btnCancelarMouseEntered
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

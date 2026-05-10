@@ -2,7 +2,6 @@ package db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -46,6 +45,7 @@ public class DB {
         st.execute(
                 "CREATE TABLE IF NOT EXISTS usuario ("
                 + "  id_usuario INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + "  nombre TEXT NOT NULL,"
                 + "  username TEXT NOT NULL UNIQUE,"
                 + "  password TEXT NOT NULL,"
                 + "  rol TEXT NOT NULL CHECK (rol IN ('TECNICO', 'FACULTATIVO'))"
@@ -102,18 +102,6 @@ public class DB {
                 + "  FOREIGN KEY (id_prueba) REFERENCES prueba(id_prueba)"
                 + ");"
         );
-
-        st.execute(
-                "CREATE TABLE IF NOT EXISTS incidencia ("
-                + "  id_incidencia INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + "  fecha TEXT NOT NULL,"
-                + "  tipo TEXT NOT NULL CHECK (tipo IN ('CONTAMINADA','INSUFICIENTE','DERRAMADA','COAGULADA')),"
-                + "  id_peticion INTEGER NOT NULL UNIQUE,"
-                + "  id_usuario INTEGER NOT NULL,"
-                + "  FOREIGN KEY (id_peticion) REFERENCES peticion(id_peticion) ON DELETE CASCADE,"
-                + "  FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)"
-                + ");"
-        );
     }
 
     private static void insertarDatosBase(Statement st) throws SQLException {
@@ -123,34 +111,61 @@ public class DB {
         insertarTiposMuestraBase(st);
         insertarPruebasBase(st);
         insertarRelacionesTipoMuestraPrueba(st);
-    }
 
+
+    }
+    
+ 
     private static void insertarUsuariosBase(Statement st) throws SQLException {
-        st.execute("INSERT OR IGNORE INTO usuario (id_usuario, username, password, rol) VALUES (1, 'tecnico', '1234', 'TECNICO');");
-        st.execute("INSERT OR IGNORE INTO usuario (id_usuario, username, password, rol) VALUES (2, 'facultativo', '1234', 'FACULTATIVO');");
+        st.execute("INSERT OR IGNORE INTO usuario (id_usuario, nombre, username, password, rol) VALUES (1, 'Tecnico', 'tecnico', '1234', 'TECNICO');");
+        st.execute("INSERT OR IGNORE INTO usuario (id_usuario, nombre, username, password, rol) VALUES (2, 'facultativo', 'facultativo', '1234', 'FACULTATIVO');");
+        st.execute("INSERT OR IGNORE INTO usuario (id_usuario, nombre, username, password, rol) VALUES (3, 'María López', 'mlopez', 'lab2025', 'TECNICO');");
+        st.execute("INSERT OR IGNORE INTO usuario (id_usuario, nombre, username, password, rol) VALUES (4, 'Ana García', 'agarcia', 'lab2025', 'TECNICO');");
+        st.execute("INSERT OR IGNORE INTO usuario (id_usuario, nombre, username, password, rol) VALUES (5, 'Raúl Navarro', 'rnavarro', 'lab2025', 'TECNICO');");
+        st.execute("INSERT OR IGNORE INTO usuario (id_usuario, nombre, username, password, rol) VALUES (6, 'Daniel Romero', 'dromero', 'lab2025', 'FACULTATIVO');");
+        st.execute("INSERT OR IGNORE INTO usuario (id_usuario, nombre, username, password, rol) VALUES (7, 'Luisa Fernández', 'lfernandez', 'lab2025', 'FACULTATIVO');");
+        st.execute("INSERT OR IGNORE INTO usuario (id_usuario, nombre, username, password, rol) VALUES (8, 'Cristina Martínez', 'cmartinez', 'lab2025', 'FACULTATIVO');");
     }
 
     private static void insertarPacientesBase(Statement st) throws SQLException {
-        st.execute("INSERT OR IGNORE INTO paciente (cip, nombre, apellidos, fecha_nacimiento) VALUES ('111111111', 'Ana', 'García López', '1990-05-12');");
-        st.execute("INSERT OR IGNORE INTO paciente (cip, nombre, apellidos, fecha_nacimiento) VALUES ('222222222', 'Luis', 'Martín Pérez', '1985-11-03');");
-        st.execute("INSERT OR IGNORE INTO paciente (cip, nombre, apellidos, fecha_nacimiento) VALUES ('333333333', 'Marta', 'Sánchez Ruiz', '2001-02-20');");
-        st.execute("INSERT OR IGNORE INTO paciente (cip, nombre, apellidos, fecha_nacimiento) VALUES ('444444444', 'Carlos', 'Fernández Gómez', '1978-09-14');");
+        st.execute("INSERT OR IGNORE INTO paciente (cip, nombre, apellidos, fecha_nacimiento) VALUES ('CIP43821976A', 'Ana', 'García López', '1990-05-12');");
+        st.execute("INSERT OR IGNORE INTO paciente (cip, nombre, apellidos, fecha_nacimiento) VALUES ('CIP72938415B', 'Luis', 'Martín Pérez', '1985-11-03');");
+        st.execute("INSERT OR IGNORE INTO paciente (cip, nombre, apellidos, fecha_nacimiento) VALUES ('CIP58392014C', 'Marta', 'Sánchez Ruiz', '2001-02-20');");
+        st.execute("INSERT OR IGNORE INTO paciente (cip, nombre, apellidos, fecha_nacimiento) VALUES ('CIP19485732D', 'Carlos', 'Fernández Gómez', '1978-09-14');");
+        st.execute("INSERT OR IGNORE INTO paciente (cip, nombre, apellidos, fecha_nacimiento) VALUES ('CIP84736291E', 'Lucía', 'Romero Castillo', '1995-07-28');");
+        st.execute("INSERT OR IGNORE INTO paciente (cip, nombre, apellidos, fecha_nacimiento) VALUES ('CIP30291847F', 'Javier', 'Navarro Molina', '1969-03-06');");
+        st.execute("INSERT OR IGNORE INTO paciente (cip, nombre, apellidos, fecha_nacimiento) VALUES ('CIP91827364G', 'Elena', 'Torres Vidal', '1982-12-19');");
+        st.execute("INSERT OR IGNORE INTO paciente (cip, nombre, apellidos, fecha_nacimiento) VALUES ('CIP67584930H', 'Sergio', 'Ortega Ramos', '1974-01-25');");
+        st.execute("INSERT OR IGNORE INTO paciente (cip, nombre, apellidos, fecha_nacimiento) VALUES ('CIP56473829J', 'Paula', 'Moreno Serrano', '2003-10-08');");
+        st.execute("INSERT OR IGNORE INTO paciente (cip, nombre, apellidos, fecha_nacimiento) VALUES ('CIP23948576K', 'Raúl', 'Iglesias Medina', '1998-04-17');");
+        st.execute("INSERT OR IGNORE INTO paciente (cip, nombre, apellidos, fecha_nacimiento) VALUES ('CIP74839201L', 'Carmen', 'Domínguez Herrera', '1957-08-30');");
+        st.execute("INSERT OR IGNORE INTO paciente (cip, nombre, apellidos, fecha_nacimiento) VALUES ('CIP10293847M', 'Alberto', 'Gil Santos', '1963-06-11');");
+        st.execute("INSERT OR IGNORE INTO paciente (cip, nombre, apellidos, fecha_nacimiento) VALUES ('CIP83726194N', 'Nuria', 'Rey Fuentes', '1989-09-22');");
+        st.execute("INSERT OR IGNORE INTO paciente (cip, nombre, apellidos, fecha_nacimiento) VALUES ('CIP49281736P', 'Diego', 'Campos León', '2010-02-04');");
+        st.execute("INSERT OR IGNORE INTO paciente (cip, nombre, apellidos, fecha_nacimiento) VALUES ('CIP72619483Q', 'Isabel', 'Vargas Peña', '1949-12-01');");
     }
 
     private static void insertarTiposMuestraBase(Statement st) throws SQLException {
-        st.execute("INSERT OR IGNORE INTO tipo_muestra (id_tipo_muestra, nombre) VALUES (1, 'Sangre');");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra (id_tipo_muestra, nombre) VALUES (1, 'Sangre total');");
         st.execute("INSERT OR IGNORE INTO tipo_muestra (id_tipo_muestra, nombre) VALUES (2, 'Suero');");
         st.execute("INSERT OR IGNORE INTO tipo_muestra (id_tipo_muestra, nombre) VALUES (3, 'Plasma');");
         st.execute("INSERT OR IGNORE INTO tipo_muestra (id_tipo_muestra, nombre) VALUES (4, 'Orina');");
         st.execute("INSERT OR IGNORE INTO tipo_muestra (id_tipo_muestra, nombre) VALUES (5, 'Heces');");
         st.execute("INSERT OR IGNORE INTO tipo_muestra (id_tipo_muestra, nombre) VALUES (6, 'Exudado faríngeo');");
-        st.execute("INSERT OR IGNORE INTO tipo_muestra (id_tipo_muestra, nombre) VALUES (7, 'Exudado nasal');");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra (id_tipo_muestra, nombre) VALUES (7, 'Exudado nasofaríngeo');");
         st.execute("INSERT OR IGNORE INTO tipo_muestra (id_tipo_muestra, nombre) VALUES (8, 'Esputo');");
         st.execute("INSERT OR IGNORE INTO tipo_muestra (id_tipo_muestra, nombre) VALUES (9, 'Líquido cefalorraquídeo');");
         st.execute("INSERT OR IGNORE INTO tipo_muestra (id_tipo_muestra, nombre) VALUES (10, 'Líquido pleural');");
         st.execute("INSERT OR IGNORE INTO tipo_muestra (id_tipo_muestra, nombre) VALUES (11, 'Líquido ascítico');");
         st.execute("INSERT OR IGNORE INTO tipo_muestra (id_tipo_muestra, nombre) VALUES (12, 'Biopsia');");
         st.execute("INSERT OR IGNORE INTO tipo_muestra (id_tipo_muestra, nombre) VALUES (13, 'Médula ósea');");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra (id_tipo_muestra, nombre) VALUES (14, 'Herida / piel');");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra (id_tipo_muestra, nombre) VALUES (15, 'Absceso');");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra (id_tipo_muestra, nombre) VALUES (16, 'Hemocultivo');");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra (id_tipo_muestra, nombre) VALUES (17, 'Catéter');");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra (id_tipo_muestra, nombre) VALUES (18, 'Líquido articular');");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra (id_tipo_muestra, nombre) VALUES (19, 'Lavado broncoalveolar');");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra (id_tipo_muestra, nombre) VALUES (20, 'Líquido pericárdico');");
     }
 
     private static void insertarPruebasBase(Statement st) throws SQLException {
@@ -205,6 +220,35 @@ public class DB {
         st.execute("INSERT OR IGNORE INTO prueba (id_prueba, nombre) VALUES (49, 'Inmunohistoquímica');");
         st.execute("INSERT OR IGNORE INTO prueba (id_prueba, nombre) VALUES (50, 'Aspirado medular');");
         st.execute("INSERT OR IGNORE INTO prueba (id_prueba, nombre) VALUES (51, 'Mielograma');");
+        st.execute("INSERT OR IGNORE INTO prueba (id_prueba, nombre) VALUES (52, 'Hemocultivo aerobio');");
+        st.execute("INSERT OR IGNORE INTO prueba (id_prueba, nombre) VALUES (53, 'Hemocultivo anaerobio');");
+        st.execute("INSERT OR IGNORE INTO prueba (id_prueba, nombre) VALUES (54, 'Procalcitonina');");
+        st.execute("INSERT OR IGNORE INTO prueba (id_prueba, nombre) VALUES (55, 'Lactato');");
+        st.execute("INSERT OR IGNORE INTO prueba (id_prueba, nombre) VALUES (56, 'Gasometría venosa');");
+        st.execute("INSERT OR IGNORE INTO prueba (id_prueba, nombre) VALUES (57, 'Gasometría arterial');");
+        st.execute("INSERT OR IGNORE INTO prueba (id_prueba, nombre) VALUES (58, 'Coagulación básica');");
+        st.execute("INSERT OR IGNORE INTO prueba (id_prueba, nombre) VALUES (59, 'Dímero D');");
+        st.execute("INSERT OR IGNORE INTO prueba (id_prueba, nombre) VALUES (60, 'Troponina');");
+        st.execute("INSERT OR IGNORE INTO prueba (id_prueba, nombre) VALUES (61, 'NT-proBNP');");
+        st.execute("INSERT OR IGNORE INTO prueba (id_prueba, nombre) VALUES (62, 'Cultivo de herida');");
+        st.execute("INSERT OR IGNORE INTO prueba (id_prueba, nombre) VALUES (63, 'Cultivo de absceso');");
+        st.execute("INSERT OR IGNORE INTO prueba (id_prueba, nombre) VALUES (64, 'Cultivo de catéter');");
+        st.execute("INSERT OR IGNORE INTO prueba (id_prueba, nombre) VALUES (65, 'Identificación bacteriana');");
+        st.execute("INSERT OR IGNORE INTO prueba (id_prueba, nombre) VALUES (66, 'Cristales en líquido articular');");
+        st.execute("INSERT OR IGNORE INTO prueba (id_prueba, nombre) VALUES (67, 'Glucosa en líquido biológico');");
+        st.execute("INSERT OR IGNORE INTO prueba (id_prueba, nombre) VALUES (68, 'Proteínas en líquido biológico');");
+        st.execute("INSERT OR IGNORE INTO prueba (id_prueba, nombre) VALUES (69, 'LDH en líquido biológico');");
+        st.execute("INSERT OR IGNORE INTO prueba (id_prueba, nombre) VALUES (70, 'Cultivo de líquido articular');");
+        st.execute("INSERT OR IGNORE INTO prueba (id_prueba, nombre) VALUES (71, 'Cultivo respiratorio');");
+        st.execute("INSERT OR IGNORE INTO prueba (id_prueba, nombre) VALUES (72, 'BAAR / Micobacterias');");
+        st.execute("INSERT OR IGNORE INTO prueba (id_prueba, nombre) VALUES (73, 'PCR virus respiratorios');");
+        st.execute("INSERT OR IGNORE INTO prueba (id_prueba, nombre) VALUES (74, 'Citología respiratoria');");
+        st.execute("INSERT OR IGNORE INTO prueba (id_prueba, nombre) VALUES (75, 'Citología de líquido pericárdico');");
+        st.execute("INSERT OR IGNORE INTO prueba (id_prueba, nombre) VALUES (76, 'Cultivo de líquido pericárdico');");
+        st.execute("INSERT OR IGNORE INTO prueba (id_prueba, nombre) VALUES (77, 'Recuento diferencial celular');");
+        st.execute("INSERT OR IGNORE INTO prueba (id_prueba, nombre) VALUES (78, 'Perfil hepático');");
+        st.execute("INSERT OR IGNORE INTO prueba (id_prueba, nombre) VALUES (79, 'Perfil renal');");
+        st.execute("INSERT OR IGNORE INTO prueba (id_prueba, nombre) VALUES (80, 'Ionograma');");
     }
 
     private static void insertarRelacionesTipoMuestraPrueba(Statement st) throws SQLException {
@@ -305,5 +349,75 @@ public class DB {
         // Médula ósea
         st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (13, 50);");
         st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (13, 51);");
+
+        // Sangre total
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (1, 52);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (1, 53);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (1, 54);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (1, 55);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (1, 56);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (1, 58);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (1, 59);");
+
+        // Suero
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (2, 60);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (2, 61);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (2, 78);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (2, 79);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (2, 80);");
+
+        // Plasma
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (3, 55);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (3, 58);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (3, 59);");
+
+        // Herida / piel
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (14, 35);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (14, 36);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (14, 37);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (14, 41);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (14, 62);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (14, 65);");
+
+        // Absceso
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (15, 36);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (15, 37);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (15, 63);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (15, 65);");
+
+        // Hemocultivo
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (16, 52);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (16, 53);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (16, 65);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (16, 37);");
+
+        // Catéter
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (17, 64);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (17, 36);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (17, 37);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (17, 65);");
+
+        // Líquido articular
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (18, 47);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (18, 66);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (18, 67);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (18, 68);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (18, 70);");
+
+        // Lavado broncoalveolar
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (19, 36);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (19, 37);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (19, 71);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (19, 72);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (19, 73);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (19, 74);");
+
+        // Líquido pericárdico
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (20, 47);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (20, 67);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (20, 68);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (20, 69);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (20, 75);");
+        st.execute("INSERT OR IGNORE INTO tipo_muestra_prueba VALUES (20, 76);");
     }
 }

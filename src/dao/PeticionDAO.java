@@ -11,6 +11,7 @@ import java.util.List;
 import model.EnumEstadoPeticion;
 import model.Peticion;
 import model.EnumPrioridad;
+import java.time.format.DateTimeFormatter;
 
 public class PeticionDAO {
     
@@ -44,10 +45,11 @@ public class PeticionDAO {
     public int insertar(Connection con, Peticion p) {
 
         String sql = "INSERT INTO peticion (fecha_registro, prioridad, estado, cip_paciente, id_usuario, id_tipo_muestra) VALUES (?, ?, ?, ?, ?, ?)";
-        
-        try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
-            
-            ps.setString(1, p.getFechaRegistro().toString());
+
+        try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+            ps.setString(1, p.getFechaRegistro().format(formatter));
             ps.setString(2, p.getPrioridad().name());
             ps.setString(3, p.getEstado().name());
             ps.setString(4, p.getCipPaciente());

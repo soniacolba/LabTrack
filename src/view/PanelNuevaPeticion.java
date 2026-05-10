@@ -6,6 +6,7 @@
 package view;
 
 
+import app.Sesion;
 import dao.PeticionDAO;
 import dao.PeticionPruebaDAO;
 import dao.PruebaDAO;
@@ -13,6 +14,7 @@ import dao.TipoMuestraDAO;
 import db.DB;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.sql.Connection;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -124,7 +126,7 @@ public class PanelNuevaPeticion extends javax.swing.JPanel {
         }
     }
 
-    private void limpiarFormulario() {
+    public void limpiarFormulario() {
         
         limpiar = true;
         
@@ -159,6 +161,28 @@ public class PanelNuevaPeticion extends javax.swing.JPanel {
         }
         
         modelo.add(i, prueba);
+    }
+
+    public boolean hayDatosSinGuardar() {
+        return !txtCip.getText().trim().isEmpty()
+                || comboTipoMuestra.getSelectedIndex() != 0
+                || !modeloAnadidas.isEmpty();
+    }
+
+    public boolean confirmarSalida() {
+        if (!hayDatosSinGuardar()) {
+            return true;
+        }
+
+        int opcion = JOptionPane.showConfirmDialog(
+                this,
+                "Tienes una petición en curso y se perderán los datos.\n¿Quieres salir igualmente?",
+                "Confirmar",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
+        );
+
+        return opcion == JOptionPane.YES_OPTION;
     }
 
     /**
@@ -267,6 +291,9 @@ public class PanelNuevaPeticion extends javax.swing.JPanel {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnBuscarMouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnBuscarMouseEntered(evt);
+            }
         });
 
         javax.swing.GroupLayout panelBtnBuscarLayout = new javax.swing.GroupLayout(panelBtnBuscar);
@@ -339,6 +366,9 @@ public class PanelNuevaPeticion extends javax.swing.JPanel {
         btnAltaPaciente.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnAltaPacienteMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnAltaPacienteMouseEntered(evt);
             }
         });
 
@@ -545,6 +575,9 @@ public class PanelNuevaPeticion extends javax.swing.JPanel {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnCancelarMouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnCancelarMouseEntered(evt);
+            }
         });
 
         javax.swing.GroupLayout panelBtnCancelarLayout = new javax.swing.GroupLayout(panelBtnCancelar);
@@ -575,6 +608,9 @@ public class PanelNuevaPeticion extends javax.swing.JPanel {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnCrearMouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnCrearMouseEntered(evt);
+            }
         });
 
         javax.swing.GroupLayout panelBtnCrearLayout = new javax.swing.GroupLayout(panelBtnCrear);
@@ -598,6 +634,10 @@ public class PanelNuevaPeticion extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCrearMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCrearMouseClicked
+        if(!btnCrear.isEnabled()){
+            return;
+        }
+        
         if (txtCip.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Debes seleccionar un paciente.");
             return;
@@ -627,7 +667,7 @@ public class PanelNuevaPeticion extends javax.swing.JPanel {
             prioridad,
             EnumEstadoPeticion.PENDIENTE,
             txtCip.getText().trim(),
-            1,
+            Sesion.getIdUsuario(),
             tipoMuestra.getId()
         );
 
@@ -846,6 +886,22 @@ public class PanelNuevaPeticion extends javax.swing.JPanel {
         }
 
     }//GEN-LAST:event_btnBuscarMouseClicked
+
+    private void btnBuscarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBuscarMouseEntered
+        btnBuscar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_btnBuscarMouseEntered
+
+    private void btnAltaPacienteMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAltaPacienteMouseEntered
+        btnAltaPaciente.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_btnAltaPacienteMouseEntered
+
+    private void btnCrearMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCrearMouseEntered
+        btnCrear.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_btnCrearMouseEntered
+
+    private void btnCancelarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCancelarMouseEntered
+        btnCancelar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_btnCancelarMouseEntered
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

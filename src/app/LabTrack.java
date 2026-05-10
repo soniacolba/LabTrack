@@ -1,7 +1,7 @@
 package app;
 
 import db.DB;
-import view.PantallaPrincipal;
+import view.VentanaLogin;
 
 public class LabTrack {
 
@@ -9,7 +9,7 @@ public class LabTrack {
         DB.initDatabase();
 
         java.awt.EventQueue.invokeLater(() -> {
-            new PantallaPrincipal().setVisible(true);
+            new VentanaLogin().setVisible(true);
         });
     }
 }

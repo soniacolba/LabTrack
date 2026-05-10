@@ -5,10 +5,12 @@
  */
 package view;
 
+import app.Sesion;
 import java.awt.CardLayout;
 import java.awt.Cursor;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.border.Border;
 
 /**
@@ -18,27 +20,34 @@ import javax.swing.border.Border;
 public final class PantallaPrincipal extends javax.swing.JFrame {
 
     private CardLayout cardLayout;
+    PanelNuevaPeticion pnlNuevaPeticion;
+    PanelBuscarPeticion pnlBuscarPeticion;
     PanelPendientesResultados pnlPendResultados;
     PanelPendientesValidacion pnlPendValidacion;
+    PanelInformesPeticion pnlInformesPeticion;
+    PanelBuscarPaciente pnlBuscarPaciente;
 
     public PantallaPrincipal() {
         initComponents();
-        setSize(1600, 1200);
+        setSize(1650, 1200);
         setLocationRelativeTo(null);
+        aplicarPermisos();
+        setTitle("LabTrack");
 
         cardLayout = new CardLayout();
         panelPrincipal.setLayout(cardLayout);
-          
+
         PanelInicio menuInicio = new PanelInicio(panelPrincipal);
-        PanelNuevaPeticion pnlNuevaPeticion = new PanelNuevaPeticion(panelPrincipal);
+        pnlNuevaPeticion = new PanelNuevaPeticion(panelPrincipal);
         PanelGestionPeticion pnlGestionPeticion = new PanelGestionPeticion(panelPrincipal);
-        PanelBuscarPeticion pnlBuscarPeticion = new PanelBuscarPeticion(panelPrincipal, pnlGestionPeticion);
-        PanelBuscarPaciente pnlBuscarPaciente = new PanelBuscarPaciente(panelPrincipal);
+        pnlBuscarPeticion = new PanelBuscarPeticion(panelPrincipal, pnlGestionPeticion);
+        pnlBuscarPaciente = new PanelBuscarPaciente(panelPrincipal);
         PanelHistoricoPaciente pnlHistoricoPaciente = new PanelHistoricoPaciente(panelPrincipal, pnlGestionPeticion);
         pnlPendResultados = new PanelPendientesResultados(panelPrincipal, pnlGestionPeticion);
         pnlPendValidacion = new PanelPendientesValidacion(panelPrincipal, pnlGestionPeticion);
-        PanelInformesPeticion pnlInformesPeticion = new PanelInformesPeticion(panelPrincipal);
-        
+        pnlInformesPeticion = new PanelInformesPeticion(panelPrincipal);
+        PanelEstadisticas pnlEstadisticas = new PanelEstadisticas(panelPrincipal);
+
         panelPrincipal.add(menuInicio, "Pantalla Inicio");
         panelPrincipal.add(pnlNuevaPeticion, "Nueva Peticion");
         panelPrincipal.add(pnlBuscarPeticion, "Buscar Peticion");
@@ -48,6 +57,7 @@ public final class PantallaPrincipal extends javax.swing.JFrame {
         panelPrincipal.add(pnlPendResultados, "Pendiente Resultados");
         panelPrincipal.add(pnlPendValidacion, "Pendiente Validacion");
         panelPrincipal.add(pnlInformesPeticion, "Informes");
+        panelPrincipal.add(pnlEstadisticas, "Estadisticas");
 
         aplicarHover(btnNuevaPeticion);
         aplicarHover(btnBuscarPeticion);
@@ -58,6 +68,23 @@ public final class PantallaPrincipal extends javax.swing.JFrame {
         aplicarHover(btnHistoricoPaciente);
         aplicarHover(btnInformePeticion);
         aplicarHover(btnEstadisticas);
+    }
+
+    private void aplicarPermisos() {
+        if (Sesion.esTecnico()) {
+            btnPendienteValidacion.setEnabled(false);
+            btnInformePeticion.setEnabled(false);
+            btnEstadisticas.setEnabled(false);
+        }
+
+        if (Sesion.esFacultativo()) {
+            btnNuevaPeticion.setEnabled(false);
+            btnPendienteResultados.setEnabled(false);
+            btnRegistrarPaciente.setEnabled(false);
+            btnBuscarPeticion.setEnabled(false);
+        }
+
+        lblUsuario.setText(Sesion.getUsername() + " - " + Sesion.getRol());
     }
 
     private void aplicarHover(JButton boton) {
@@ -102,7 +129,10 @@ public final class PantallaPrincipal extends javax.swing.JFrame {
         fondo = new javax.swing.JPanel();
         barraSuperior = new javax.swing.JPanel();
         lblLabTrack = new javax.swing.JLabel();
+        pnlUsuario = new javax.swing.JPanel();
         lblUsuario = new javax.swing.JLabel();
+        pnlBtnLogout = new javax.swing.JPanel();
+        btnLogout = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         pnlCentro = new javax.swing.JPanel();
         menuLateral = new javax.swing.JPanel();
@@ -144,11 +174,46 @@ public final class PantallaPrincipal extends javax.swing.JFrame {
         lblLabTrack.setPreferredSize(new java.awt.Dimension(100, 72));
         barraSuperior.add(lblLabTrack, java.awt.BorderLayout.CENTER);
 
-        lblUsuario.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        pnlUsuario.setBackground(new java.awt.Color(75, 113, 167));
+        pnlUsuario.setMinimumSize(new java.awt.Dimension(500, 100));
+        pnlUsuario.setPreferredSize(new java.awt.Dimension(500, 90));
+        pnlUsuario.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        lblUsuario.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         lblUsuario.setForeground(new java.awt.Color(255, 255, 255));
+        lblUsuario.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblUsuario.setText("Usuario");
-        lblUsuario.setPreferredSize(new java.awt.Dimension(300, 14));
-        barraSuperior.add(lblUsuario, java.awt.BorderLayout.LINE_END);
+        pnlUsuario.add(lblUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(-400, 30, 820, -1));
+
+        pnlBtnLogout.setBackground(new java.awt.Color(75, 113, 167));
+
+        btnLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/logout.png"))); // NOI18N
+        btnLogout.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btnLogoutMousePressed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlBtnLogoutLayout = new javax.swing.GroupLayout(pnlBtnLogout);
+        pnlBtnLogout.setLayout(pnlBtnLogoutLayout);
+        pnlBtnLogoutLayout.setHorizontalGroup(
+            pnlBtnLogoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlBtnLogoutLayout.createSequentialGroup()
+                .addContainerGap(42, Short.MAX_VALUE)
+                .addComponent(btnLogout)
+                .addGap(24, 24, 24))
+        );
+        pnlBtnLogoutLayout.setVerticalGroup(
+            pnlBtnLogoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlBtnLogoutLayout.createSequentialGroup()
+                .addContainerGap(30, Short.MAX_VALUE)
+                .addComponent(btnLogout)
+                .addGap(28, 28, 28))
+        );
+
+        pnlUsuario.add(pnlBtnLogout, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 0, -1, 90));
+
+        barraSuperior.add(pnlUsuario, java.awt.BorderLayout.LINE_END);
 
         fondo.add(barraSuperior, java.awt.BorderLayout.NORTH);
 
@@ -308,6 +373,11 @@ public final class PantallaPrincipal extends javax.swing.JFrame {
         btnEstadisticas.setBorderPainted(false);
         btnEstadisticas.setContentAreaFilled(false);
         btnEstadisticas.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnEstadisticas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEstadisticasActionPerformed(evt);
+            }
+        });
         menuInformes.add(btnEstadisticas, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, 220, 40));
 
         btnInformePeticion.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
@@ -353,75 +423,160 @@ public final class PantallaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPendienteValidacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPendienteValidacionActionPerformed
+        pnlBuscarPaciente.limpiarFormulario();
+        
+        if (!pnlNuevaPeticion.confirmarSalida()) {
+            return;
+        }
+        if (!pnlBuscarPeticion.confirmarSalida()) {
+            return;
+        }
+
+        pnlNuevaPeticion.limpiarFormulario();
+        pnlBuscarPeticion.limpiarFormulario();
+
         pnlPendValidacion.cargarPendientes();
         cardLayout.show(panelPrincipal, "Pendiente Validacion");
     }//GEN-LAST:event_btnPendienteValidacionActionPerformed
 
     private void btnNuevaPeticionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaPeticionActionPerformed
+        pnlBuscarPaciente.limpiarFormulario();
+        
+        if (!pnlBuscarPeticion.confirmarSalida()) {
+            return;
+        }
+
+        pnlBuscarPeticion.limpiarFormulario();
+
         cardLayout.show(panelPrincipal, "Nueva Peticion");
     }//GEN-LAST:event_btnNuevaPeticionActionPerformed
 
     private void btnPendienteResultadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPendienteResultadosActionPerformed
+        pnlBuscarPaciente.limpiarFormulario();
+        
+        if (!pnlNuevaPeticion.confirmarSalida()) {
+            return;
+        }
+        if (!pnlBuscarPeticion.confirmarSalida()) {
+            return;
+        }
+
+        pnlNuevaPeticion.limpiarFormulario();
+        pnlBuscarPeticion.limpiarFormulario();
+
         pnlPendResultados.cargarPendientes();
         cardLayout.show(panelPrincipal, "Pendiente Resultados");
     }//GEN-LAST:event_btnPendienteResultadosActionPerformed
 
     private void btnBuscarPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarPacienteActionPerformed
+        if (!pnlNuevaPeticion.confirmarSalida()) {
+            return;
+        }
+        if (!pnlBuscarPeticion.confirmarSalida()) {
+            return;
+        }
+
+        pnlNuevaPeticion.limpiarFormulario();
+        pnlBuscarPeticion.limpiarFormulario();
+
         cardLayout.show(panelPrincipal, "Buscar Paciente");
     }//GEN-LAST:event_btnBuscarPacienteActionPerformed
 
     private void btnHistoricoPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistoricoPacienteActionPerformed
+        pnlBuscarPaciente.limpiarFormulario();
+        
+        if (!pnlNuevaPeticion.confirmarSalida()) {
+            return;
+        }
+        if (!pnlBuscarPeticion.confirmarSalida()) {
+            return;
+        }
+
+        pnlNuevaPeticion.limpiarFormulario();
+        pnlBuscarPeticion.limpiarFormulario();
+
         cardLayout.show(panelPrincipal, "Historico paciente");
     }//GEN-LAST:event_btnHistoricoPacienteActionPerformed
 
     private void btnInformePeticionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInformePeticionActionPerformed
+        pnlBuscarPaciente.limpiarFormulario();
+        
+        if (!pnlNuevaPeticion.confirmarSalida()) {
+            return;
+        }
+        if (!pnlBuscarPeticion.confirmarSalida()) {
+            return;
+        }
+
+        pnlNuevaPeticion.limpiarFormulario();
+        pnlBuscarPeticion.limpiarFormulario();
+
+        pnlInformesPeticion.limpiarFormulario();
+        pnlInformesPeticion.cargarPendientesInformar();
         cardLayout.show(panelPrincipal, "Informes");
     }//GEN-LAST:event_btnInformePeticionActionPerformed
 
     private void btnRegistrarPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarPacienteActionPerformed
+        pnlBuscarPaciente.limpiarFormulario();
+        
+        if (!pnlNuevaPeticion.confirmarSalida()) {
+            return;
+        }
+        if (!pnlBuscarPeticion.confirmarSalida()) {
+            return;
+        }
+
+        pnlNuevaPeticion.limpiarFormulario();
+        pnlBuscarPeticion.limpiarFormulario();
+
         DialogoAltaPaciente dialog = new DialogoAltaPaciente(this, true);
         dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);
     }//GEN-LAST:event_btnRegistrarPacienteActionPerformed
 
     private void btnBuscarPeticionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarPeticionActionPerformed
+        pnlBuscarPaciente.limpiarFormulario();
+        
+        if (!pnlNuevaPeticion.confirmarSalida()) {
+            return;
+        }
+
+        pnlNuevaPeticion.limpiarFormulario();
+
         cardLayout.show(panelPrincipal, "Buscar Peticion");
     }//GEN-LAST:event_btnBuscarPeticionActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-    /*    try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(PantallaPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(PantallaPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(PantallaPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(PantallaPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }*/
-        //</editor-fold>
+    private void btnEstadisticasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstadisticasActionPerformed
+        pnlBuscarPaciente.limpiarFormulario();
+        
+        cardLayout.show(panelPrincipal, "Estadisticas");
+    }//GEN-LAST:event_btnEstadisticasActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new PantallaPrincipal().setVisible(true);
-            }
-        });
-    }
+    private void btnLogoutMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLogoutMousePressed
+        if (!pnlNuevaPeticion.confirmarSalida()) {
+            return;
+        }
+
+        int opcion = JOptionPane.showConfirmDialog(
+                this,
+                "¿Seguro que deseas cerrar sesión?",
+                "Cerrar sesión",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (opcion != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        Sesion.cerrarSesion();
+
+        VentanaLogin login = new VentanaLogin();
+        login.setVisible(true);
+
+        this.dispose();
+    }//GEN-LAST:event_btnLogoutMousePressed
+
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel barraSuperior;
@@ -430,6 +585,7 @@ public final class PantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnEstadisticas;
     private javax.swing.JButton btnHistoricoPaciente;
     private javax.swing.JButton btnInformePeticion;
+    private javax.swing.JLabel btnLogout;
     private javax.swing.JButton btnNuevaPeticion;
     private javax.swing.JButton btnPendienteResultados;
     private javax.swing.JButton btnPendienteValidacion;
@@ -446,6 +602,8 @@ public final class PantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel menuPacientes;
     private javax.swing.JPanel menuPeticiones;
     private javax.swing.JPanel panelPrincipal;
+    private javax.swing.JPanel pnlBtnLogout;
     private javax.swing.JPanel pnlCentro;
+    private javax.swing.JPanel pnlUsuario;
     // End of variables declaration//GEN-END:variables
 }

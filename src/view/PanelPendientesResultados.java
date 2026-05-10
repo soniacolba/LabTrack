@@ -11,6 +11,7 @@ import dao.PeticionDAO;
 import dao.TipoMuestraDAO;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
@@ -177,6 +178,9 @@ public class PanelPendientesResultados extends javax.swing.JPanel {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnCancelarMouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnCancelarMouseEntered(evt);
+            }
         });
 
         javax.swing.GroupLayout panelBtnCancelarLayout = new javax.swing.GroupLayout(panelBtnCancelar);
@@ -206,6 +210,9 @@ public class PanelPendientesResultados extends javax.swing.JPanel {
         btnAbrir.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnAbrirMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnAbrirMouseEntered(evt);
             }
         });
 
@@ -270,6 +277,14 @@ public class PanelPendientesResultados extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_tblPendientesMouseClicked
+
+    private void btnAbrirMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAbrirMouseEntered
+        btnAbrir.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_btnAbrirMouseEntered
+
+    private void btnCancelarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCancelarMouseEntered
+        btnCancelar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_btnCancelarMouseEntered
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

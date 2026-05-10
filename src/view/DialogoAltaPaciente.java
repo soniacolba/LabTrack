@@ -7,6 +7,7 @@ package view;
 
 import com.github.lgooddatepicker.components.DatePicker;
 import dao.PacienteDAO;
+import java.awt.Cursor;
 import java.time.LocalDate;
 import java.util.Locale;
 import javax.swing.JOptionPane;
@@ -168,6 +169,9 @@ public class DialogoAltaPaciente extends javax.swing.JDialog {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnAceptarMouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnAceptarMouseEntered(evt);
+            }
         });
 
         javax.swing.GroupLayout panelBtnAceptarLayout = new javax.swing.GroupLayout(panelBtnAceptar);
@@ -197,6 +201,9 @@ public class DialogoAltaPaciente extends javax.swing.JDialog {
         btnCancelar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnCancelarMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnCancelarMouseEntered(evt);
             }
         });
 
@@ -270,6 +277,14 @@ public class DialogoAltaPaciente extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "No se pudo registrar el paciente");
         }
     }//GEN-LAST:event_btnAceptarMouseClicked
+
+    private void btnCancelarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCancelarMouseEntered
+        btnCancelar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_btnCancelarMouseEntered
+
+    private void btnAceptarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAceptarMouseEntered
+        btnAceptar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_btnAceptarMouseEntered
 
 
 

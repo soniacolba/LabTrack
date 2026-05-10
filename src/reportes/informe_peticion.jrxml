@@ -99,6 +99,7 @@ new java.text.SimpleDateFormat("dd/MM/yyyy").format(
 				</textElement>
 				<textFieldExpression><![CDATA[$F{estado}.toString().equals("INFORMADA")
 || $F{estado}.toString().equals("ANULADA")
+|| $F{estado}.toString().equals("VALIDADA")
 ? "INFORME FINAL"
 : "INFORME PRELIMINAR"]]></textFieldExpression>
 			</textField>
@@ -117,7 +118,7 @@ new java.text.SimpleDateFormat("dd/MM/yyyy").format(
 				<reportElement x="16" y="20" width="206" height="20" uuid="ba8d7590-8f81-42f7-b9e0-50a1ed25d4c1"/>
 				<textFieldExpression><![CDATA["Fecha Solicitud: " +
 new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(
-    new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").parse($F{fecha_registro}.toString())
+    new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm").parse($F{fecha_registro}.toString())
 )]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -162,7 +163,7 @@ new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField>
-				<reportElement x="16" y="0" width="100" height="20" uuid="1fe87c08-e4f1-4518-ba24-e330f66c5eb5"/>
+				<reportElement x="16" y="0" width="262" height="20" uuid="1fe87c08-e4f1-4518-ba24-e330f66c5eb5"/>
 				<textFieldExpression><![CDATA[""+$F{prueba}]]></textFieldExpression>
 			</textField>
 			<textField>
