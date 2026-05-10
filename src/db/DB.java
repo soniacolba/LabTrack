@@ -45,7 +45,6 @@ public class DB {
         st.execute(
                 "CREATE TABLE IF NOT EXISTS usuario ("
                 + "  id_usuario INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + "  nombre TEXT NOT NULL,"
                 + "  username TEXT NOT NULL UNIQUE,"
                 + "  password TEXT NOT NULL,"
                 + "  rol TEXT NOT NULL CHECK (rol IN ('TECNICO', 'FACULTATIVO'))"

@@ -37,7 +37,6 @@ public final class PantallaPrincipal extends javax.swing.JFrame {
         cardLayout = new CardLayout();
         panelPrincipal.setLayout(cardLayout);
 
-        PanelInicio menuInicio = new PanelInicio(panelPrincipal);
         pnlNuevaPeticion = new PanelNuevaPeticion(panelPrincipal);
         PanelGestionPeticion pnlGestionPeticion = new PanelGestionPeticion(panelPrincipal);
         pnlBuscarPeticion = new PanelBuscarPeticion(panelPrincipal, pnlGestionPeticion);
@@ -47,6 +46,7 @@ public final class PantallaPrincipal extends javax.swing.JFrame {
         pnlPendValidacion = new PanelPendientesValidacion(panelPrincipal, pnlGestionPeticion);
         pnlInformesPeticion = new PanelInformesPeticion(panelPrincipal);
         PanelEstadisticas pnlEstadisticas = new PanelEstadisticas(panelPrincipal);
+        PanelInicio menuInicio = new PanelInicio(panelPrincipal, pnlPendResultados, pnlPendValidacion, pnlInformesPeticion);
 
         panelPrincipal.add(menuInicio, "Pantalla Inicio");
         panelPrincipal.add(pnlNuevaPeticion, "Nueva Peticion");
@@ -424,7 +424,7 @@ public final class PantallaPrincipal extends javax.swing.JFrame {
 
     private void btnPendienteValidacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPendienteValidacionActionPerformed
         pnlBuscarPaciente.limpiarFormulario();
-        
+
         if (!pnlNuevaPeticion.confirmarSalida()) {
             return;
         }
@@ -441,7 +441,7 @@ public final class PantallaPrincipal extends javax.swing.JFrame {
 
     private void btnNuevaPeticionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaPeticionActionPerformed
         pnlBuscarPaciente.limpiarFormulario();
-        
+
         if (!pnlBuscarPeticion.confirmarSalida()) {
             return;
         }
@@ -453,7 +453,7 @@ public final class PantallaPrincipal extends javax.swing.JFrame {
 
     private void btnPendienteResultadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPendienteResultadosActionPerformed
         pnlBuscarPaciente.limpiarFormulario();
-        
+
         if (!pnlNuevaPeticion.confirmarSalida()) {
             return;
         }
@@ -484,7 +484,7 @@ public final class PantallaPrincipal extends javax.swing.JFrame {
 
     private void btnHistoricoPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistoricoPacienteActionPerformed
         pnlBuscarPaciente.limpiarFormulario();
-        
+
         if (!pnlNuevaPeticion.confirmarSalida()) {
             return;
         }
@@ -500,7 +500,7 @@ public final class PantallaPrincipal extends javax.swing.JFrame {
 
     private void btnInformePeticionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInformePeticionActionPerformed
         pnlBuscarPaciente.limpiarFormulario();
-        
+
         if (!pnlNuevaPeticion.confirmarSalida()) {
             return;
         }
@@ -518,7 +518,7 @@ public final class PantallaPrincipal extends javax.swing.JFrame {
 
     private void btnRegistrarPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarPacienteActionPerformed
         pnlBuscarPaciente.limpiarFormulario();
-        
+
         if (!pnlNuevaPeticion.confirmarSalida()) {
             return;
         }
@@ -536,7 +536,7 @@ public final class PantallaPrincipal extends javax.swing.JFrame {
 
     private void btnBuscarPeticionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarPeticionActionPerformed
         pnlBuscarPaciente.limpiarFormulario();
-        
+
         if (!pnlNuevaPeticion.confirmarSalida()) {
             return;
         }
@@ -548,7 +548,7 @@ public final class PantallaPrincipal extends javax.swing.JFrame {
 
     private void btnEstadisticasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstadisticasActionPerformed
         pnlBuscarPaciente.limpiarFormulario();
-        
+
         cardLayout.show(panelPrincipal, "Estadisticas");
     }//GEN-LAST:event_btnEstadisticasActionPerformed
 
@@ -575,7 +575,6 @@ public final class PantallaPrincipal extends javax.swing.JFrame {
 
         this.dispose();
     }//GEN-LAST:event_btnLogoutMousePressed
-
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

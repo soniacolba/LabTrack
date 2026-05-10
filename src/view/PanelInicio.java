@@ -5,6 +5,7 @@
  */
 package view;
 
+import app.Sesion;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -17,19 +18,44 @@ import javax.swing.JPanel;
 public class PanelInicio extends javax.swing.JPanel {
 
     private JPanel panelPrincipal;
-    
-    public PanelInicio(JPanel panelPrincipal) {
+    PanelPendientesResultados pnlPendResultados;
+    PanelInformesPeticion pnlInformesPeticion;
+    PanelPendientesValidacion pnlPendValidacion;
+
+    public PanelInicio(
+            JPanel panelPrincipal,
+            PanelPendientesResultados pnlPendResultados,
+            PanelPendientesValidacion pnlPendValidacion,
+            PanelInformesPeticion pnlInformesPeticion) {
+
         this.panelPrincipal = panelPrincipal;
+        this.pnlPendResultados = pnlPendResultados;
+        this.pnlPendValidacion = pnlPendValidacion;
+        this.pnlInformesPeticion = pnlInformesPeticion;
+
         initComponents();
+        aplicarPermisos();
     }
 
-    private void colorEntrar(JPanel panel){
+    private void colorEntrar(JPanel panel) {
         panel.setBackground(new Color(230, 232, 235));
         panel.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
-    
-    private void colorSalir(JPanel panel){
+
+    private void colorSalir(JPanel panel) {
         panel.setBackground(new Color(243, 245, 249));
+    }
+
+    private void aplicarPermisos() {
+        if (Sesion.esTecnico()) {
+            lblPendValidacion.setEnabled(false);
+            lblGenerarInforme.setEnabled(false);
+        }
+
+        if (Sesion.esFacultativo()) {
+            lblNuevaPeticion.setEnabled(false);
+            lblPendResultados.setEnabled(false);
+        }
     }
 
     /**
@@ -217,11 +243,17 @@ public class PanelInicio extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void lblNuevaPeticionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblNuevaPeticionMouseClicked
+        if (!lblNuevaPeticion.isEnabled()) {
+            return;
+        }
         ((CardLayout) panelPrincipal.getLayout())
-        .show(panelPrincipal, "Nueva Peticion");
+                .show(panelPrincipal, "Nueva Peticion");
     }//GEN-LAST:event_lblNuevaPeticionMouseClicked
 
     private void lblNuevaPeticionMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblNuevaPeticionMouseEntered
+        if (!lblNuevaPeticion.isEnabled()) {
+            return;
+        }
         colorEntrar(pnlNuevaPeticion);
     }//GEN-LAST:event_lblNuevaPeticionMouseEntered
 
@@ -230,10 +262,19 @@ public class PanelInicio extends javax.swing.JPanel {
     }//GEN-LAST:event_lblNuevaPeticionMouseExited
 
     private void lblPendResultadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblPendResultadosMouseClicked
-        
+        if (!lblPendResultados.isEnabled()) {
+            return;
+        }
+        pnlPendResultados.cargarPendientes();
+        ((CardLayout) panelPrincipal.getLayout())
+                .show(panelPrincipal, "Pendiente Resultados");
     }//GEN-LAST:event_lblPendResultadosMouseClicked
 
     private void lblPendResultadosMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblPendResultadosMouseEntered
+        if (!lblPendResultados.isEnabled()) {
+            return;
+        }
+
         colorEntrar(pnlPendienteResultados);
     }//GEN-LAST:event_lblPendResultadosMouseEntered
 
@@ -242,10 +283,19 @@ public class PanelInicio extends javax.swing.JPanel {
     }//GEN-LAST:event_lblPendResultadosMouseExited
 
     private void lblPendValidacionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblPendValidacionMouseClicked
-        // TODO add your handling code here:
+        if (!lblPendValidacion.isEnabled()) {
+            return;
+        }
+        pnlPendValidacion.cargarPendientes();
+        ((CardLayout) panelPrincipal.getLayout())
+                .show(panelPrincipal, "Pendiente Validacion");
     }//GEN-LAST:event_lblPendValidacionMouseClicked
 
     private void lblPendValidacionMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblPendValidacionMouseEntered
+        if (!lblPendValidacion.isEnabled()) {
+            return;
+        }
+
         colorEntrar(pnlPendienteValidacion);
     }//GEN-LAST:event_lblPendValidacionMouseEntered
 
@@ -254,10 +304,21 @@ public class PanelInicio extends javax.swing.JPanel {
     }//GEN-LAST:event_lblPendValidacionMouseExited
 
     private void lblGenerarInformeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblGenerarInformeMouseClicked
-        // TODO add your handling code here:
+        if (!lblGenerarInforme.isEnabled()) {
+            return;
+        }
+
+        pnlInformesPeticion.limpiarFormulario();
+        pnlInformesPeticion.cargarPendientesInformar();
+        ((CardLayout) panelPrincipal.getLayout())
+                .show(panelPrincipal, "Informes");
     }//GEN-LAST:event_lblGenerarInformeMouseClicked
 
     private void lblGenerarInformeMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblGenerarInformeMouseEntered
+        if (!lblGenerarInforme.isEnabled()) {
+            return;
+        }
+
         colorEntrar(pnlGenerarInforme);
     }//GEN-LAST:event_lblGenerarInformeMouseEntered
 
